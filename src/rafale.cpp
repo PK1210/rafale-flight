@@ -68,16 +68,16 @@ Rafale::Rafale(float x, float y) {
               0.0f,       height,   depth/2,
               0.0f,       height,   depth, // triangle 1 : end
             // Nose
-              0.0f,      0.0f,   -depth-span/2,
+              0.0f,      0.0f,   -depth-3*span/4,
              width,    height,   -depth,
             -width,    height,   -depth,
-              0.0f,      0.0f,   -depth-span/2,
+              0.0f,      0.0f,   -depth-3*span/4,
             -width,    height,   -depth,
             -width,   -height,   -depth,
-              0.0f,      0.0f,   -depth-span/2,
+              0.0f,      0.0f,   -depth-3*span/4,
             -width,   -height,   -depth,
              width,   -height,   -depth,
-              0.0f,      0.0f,   -depth-span/2,
+              0.0f,      0.0f,   -depth-3*span/4,
              width,   -height,   -depth,
              width,    height,   -depth
         };

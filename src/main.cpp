@@ -1,9 +1,8 @@
 #include<unistd.h>
 
 #include "main.h"
+#include "engine.h"
 #include "timer.h"
-#include "rafale.h"
-#include "ball.h"
 
 using namespace std;
 
@@ -15,9 +14,7 @@ GLFWwindow *window;
 * Customizable functions *
 **************************/
 
-// Ball ball1, ball2;
-Rafale rafale;
-bounding_box_t a,b;
+Engine engine;
 
 const float width = 1000;
 const float height = 1000;
@@ -25,8 +22,9 @@ const float height = 1000;
 float screen_zoom = 1, screen_center_x = 0, screen_center_y = 0;
 float camera_rotation_angle = 0;
 
-float eye_x = rafale.position.x, eye_y = rafale.position.y, eye_z = rafale.position.z + 10;
-float target_x = 0,target_y = 0, target_z = 0;
+glm::vec3 eye (0, 0, 10);
+glm::vec3 target(0, 0, 0);
+glm::vec3 up(0, 1, 0);
 
 Timer t60(1.0 / 60);
 
@@ -41,18 +39,16 @@ void draw() {
     glUseProgram (programID);
 
     // Eye - Location of camera. Don't change unless you are sure!!
-    // glm::vec3 eye ( 5*cos(camera_rotation_angle*M_PI/180.0f), 0, 5*sin(camera_rotation_angle*M_PI/180.0f) );
-    glm::vec3 eye (eye_x,eye_y,eye_z);
+    // glm::vec3 eye (eye_x,eye_y,eye_z);
+
     // Target - Where is the camera looking at.  Don't change unless you are sure!!
-    glm::vec3 target (target_x, target_y, target_z);
-    // glm::vec3 target (ball1.position.x, ball1.position.y, 0);
+    // glm::vec3 target (target_x, target_y, target_z);
 
     // Up - Up vector defines tilt of camera.  Don't change unless you are sure!!
-    glm::vec3 up (0, 1, 0);
+    // glm::vec3 up (up_x, up_y, up_z);
 
     // Compute Camera matrix (view)
     Matrices.view = glm::lookAt( eye, target, up ); // Rotating Camera for 3D
-    // Don't change unless you are sure!!
     // Matrices.view = glm::lookAt(glm::vec3(0, 0, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)); // Fixed camera for 2D (ortho) in XY plane
 
     // Compute ViewProject matrix as view/camera might not be changed for this frame (basic scenario)
@@ -66,98 +62,45 @@ void draw() {
     glm::mat4 MVP;  // MVP = Projection * View * Model
 
     // Scene render
-    // ball1.draw(VP);
-    // ball2.draw(VP);
-    rafale.draw(VP);
+    engine.draw(VP);
 }
 
 void tick_input(GLFWwindow *window) {
-    int left  = glfwGetKey(window, GLFW_KEY_LEFT);
-    int right = glfwGetKey(window, GLFW_KEY_RIGHT);
-    int view_1 = glfwGetKey(window, GLFW_KEY_1);
-    int view_2 = glfwGetKey(window, GLFW_KEY_2);
-    int view_3 = glfwGetKey(window, GLFW_KEY_3);
-    if (left) {
-        // Do something
+    int follow_cam_view = glfwGetKey(window, GLFW_KEY_1);
+    int top_view = glfwGetKey(window, GLFW_KEY_2);
+    int plane_view = glfwGetKey(window, GLFW_KEY_3);
+    int tower_view = glfwGetKey(window, GLFW_KEY_4);
+    int helicopter_view = glfwGetKey(window, GLFW_KEY_5);
+    if(follow_cam_view) {
+        eye = glm::vec3 (0,3,12);
+        target = engine.get_origin();
+        up = glm::vec3 (0,1,0);
     }
-    if(view_1) {
-        // x = -5;
-        eye_x = 0;
-        eye_y = 10;
-        eye_z = 0;
+    if(top_view) {
+        eye = glm::vec3 (0,25,0);
+        target = engine.get_origin();
+        up = glm::vec3 (0,0,-1);
     }
-    if(view_2) {
-        eye_y = -10;
-        eye_x = -10;
+    if(plane_view) {
+        eye = engine.get_origin();
+        target = engine.get_origin();
+        up = glm::vec3 (0,0,-1);
     }
-    if(view_3) {
-        eye_x = 0;
-        eye_y = 0;
+    if(tower_view) {
+        eye = glm::vec3 (-6,8,10);
+        target = engine.get_origin();
+        up = glm::vec3 (0,100,0);
     }
-
-    // Airplane controls
-    int key_w = glfwGetKey(window, GLFW_KEY_W);
-    int key_s = glfwGetKey(window, GLFW_KEY_S);
-    int key_a = glfwGetKey(window, GLFW_KEY_A);
-    int key_d = glfwGetKey(window, GLFW_KEY_D);
-    int key_q = glfwGetKey(window, GLFW_KEY_Q);
-    int key_e = glfwGetKey(window, GLFW_KEY_E);
-    if(key_w) {
-        //Pitch up control
-        rafale.pitch(true);
+    if(helicopter_view) {
+        eye = glm::vec3 (6,8,-10);
+        target = engine.get_origin();
+        up = glm::vec3 (0,100,0);
     }
-    if(key_s) {
-        //Pitch down control
-        rafale.pitch(false);
-    }
-    if(key_a) {
-        //Left control
-        rafale.yaw(false);
-    }
-    if(key_d) {
-        //Right control
-        rafale.yaw(true);
-    }
-    if(key_q) {
-        //Counterclockwise roll control
-        rafale.roll(true);
-    }
-    if(key_e) {
-        //Clockwise roll control
-        rafale.roll(false);
-    }
-
-    // int key_ = glfwGetKey(window, GLFW_KEY_);
-    // int key_ = glfwGetKey(window, GLFW_KEY_);
-    // if(key_) {
-    //     // control
-    //     rafale.();
-    // }
-    // if(key_) {
-    //     // control
-    //     rafale.();
-    // }
+    engine.tick_input(window);
 }
 
 void tick_elements() {
-    // ball1.tick();
-    // ball2.tick();
-
-    rafale.tick();
-
-    // a.x = ball1.position.x;
-    // a.y = ball1.position.y;
-    // b.x = ball2.position.x;
-    // b.y = ball2.position.y;
-    // a.height = 2;
-    // b.height = 2;
-    // a.width = 2;
-    // a.width = 2;
-    // if(detect_collision(a, b))
-    // {
-      // ball1.speed *= -1;
-      // ball2.speed *= -1;
-    // }
+    engine.tick();
     // camera_rotation_angle += 1;
 }
 
@@ -165,14 +108,8 @@ void tick_elements() {
 /* Add all the models to be created here */
 void initGL(GLFWwindow *window, int width, int height) {
     /* Objects should be created before any other gl function and shaders */
-    // Create the models
 
-    // ball1       = Ball(2,  3, COLOR_RED);
-    // ball2       = Ball(2, -3, COLOR_GREEN);
-
-    rafale      = Rafale(0, 0);
-
-    // ball2.speed *= -1;
+    engine = Engine(1);
 
     // Create and compile our GLSL program from the shaders
     programID = LoadShaders("Sample_GL.vert", "Sample_GL.frag");
