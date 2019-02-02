@@ -1,5 +1,8 @@
+#include<unistd.h>
+
 #include "main.h"
 #include "timer.h"
+#include "rafale.h"
 #include "ball.h"
 
 using namespace std;
@@ -12,13 +15,18 @@ GLFWwindow *window;
 * Customizable functions *
 **************************/
 
-Ball ball1, ball2;
+// Ball ball1, ball2;
+Rafale rafale;
 bounding_box_t a,b;
+
+const float width = 1000;
+const float height = 1000;
 
 float screen_zoom = 1, screen_center_x = 0, screen_center_y = 0;
 float camera_rotation_angle = 0;
 
-float x = 0,y = 0,z = 0;
+float eye_x = rafale.position.x, eye_y = rafale.position.y, eye_z = rafale.position.z + 10;
+float target_x = 0,target_y = 0, target_z = 0;
 
 Timer t60(1.0 / 60);
 
@@ -34,13 +42,13 @@ void draw() {
 
     // Eye - Location of camera. Don't change unless you are sure!!
     // glm::vec3 eye ( 5*cos(camera_rotation_angle*M_PI/180.0f), 0, 5*sin(camera_rotation_angle*M_PI/180.0f) );
-    glm::vec3 eye (x,y,z);
+    glm::vec3 eye (eye_x,eye_y,eye_z);
     // Target - Where is the camera looking at.  Don't change unless you are sure!!
-    // glm::vec3 target (0, 0, 0);
-    glm::vec3 target (ball1.position.x, ball1.position.y, 0);
+    glm::vec3 target (target_x, target_y, target_z);
+    // glm::vec3 target (ball1.position.x, ball1.position.y, 0);
 
     // Up - Up vector defines tilt of camera.  Don't change unless you are sure!!
-    glm::vec3 up (0, 0, 1);
+    glm::vec3 up (0, 1, 0);
 
     // Compute Camera matrix (view)
     Matrices.view = glm::lookAt( eye, target, up ); // Rotating Camera for 3D
@@ -48,7 +56,7 @@ void draw() {
     // Matrices.view = glm::lookAt(glm::vec3(0, 0, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)); // Fixed camera for 2D (ortho) in XY plane
 
     // Compute ViewProject matrix as view/camera might not be changed for this frame (basic scenario)
-    Matrices.projection = glm::perspective(glm::radians(45.0f), 4.0f/3.0f, 0.1f, 100.f);
+    Matrices.projection = glm::perspective(glm::radians(45.0f), float(width)/float(height), 1.0f, 150.f);
     // Don't change unless you are sure!!
     glm::mat4 VP = Matrices.projection * Matrices.view;
 
@@ -58,8 +66,9 @@ void draw() {
     glm::mat4 MVP;  // MVP = Projection * View * Model
 
     // Scene render
-    ball1.draw(VP);
-    ball2.draw(VP);
+    // ball1.draw(VP);
+    // ball2.draw(VP);
+    rafale.draw(VP);
 }
 
 void tick_input(GLFWwindow *window) {
@@ -73,38 +82,83 @@ void tick_input(GLFWwindow *window) {
     }
     if(view_1) {
         // x = -5;
-        x = 0;
-        y = 0;
-        z = 10;
+        eye_x = 0;
+        eye_y = 10;
+        eye_z = 0;
     }
     if(view_2) {
-        y = -10;
-        x = -10;
-        // z = -5;
+        eye_y = -10;
+        eye_x = -10;
     }
     if(view_3) {
-        x = ball2.position.x;
-        y = ball2.position.y;
+        eye_x = 0;
+        eye_y = 0;
     }
+
+    // Airplane controls
+    int key_w = glfwGetKey(window, GLFW_KEY_W);
+    int key_s = glfwGetKey(window, GLFW_KEY_S);
+    int key_a = glfwGetKey(window, GLFW_KEY_A);
+    int key_d = glfwGetKey(window, GLFW_KEY_D);
+    int key_q = glfwGetKey(window, GLFW_KEY_Q);
+    int key_e = glfwGetKey(window, GLFW_KEY_E);
+    if(key_w) {
+        //Pitch up control
+        rafale.pitch(true);
+    }
+    if(key_s) {
+        //Pitch down control
+        rafale.pitch(false);
+    }
+    if(key_a) {
+        //Left control
+        rafale.yaw(false);
+    }
+    if(key_d) {
+        //Right control
+        rafale.yaw(true);
+    }
+    if(key_q) {
+        //Counterclockwise roll control
+        rafale.roll(true);
+    }
+    if(key_e) {
+        //Clockwise roll control
+        rafale.roll(false);
+    }
+
+    // int key_ = glfwGetKey(window, GLFW_KEY_);
+    // int key_ = glfwGetKey(window, GLFW_KEY_);
+    // if(key_) {
+    //     // control
+    //     rafale.();
+    // }
+    // if(key_) {
+    //     // control
+    //     rafale.();
+    // }
 }
 
 void tick_elements() {
-    ball1.tick();
-    ball2.tick();
-    a.x = ball1.position.x;
-    a.y = ball1.position.y;
-    b.x = ball2.position.x;
-    b.y = ball2.position.y;
-    a.height = 2;
-    b.height = 2;
-    a.width = 2;
-    a.width = 2;
-    if(detect_collision(a, b))
-    {
-      ball1.speed *= -1;
-      ball2.speed *= -1;
-    }
-    camera_rotation_angle += 1;
+    // ball1.tick();
+    // ball2.tick();
+
+    rafale.tick();
+
+    // a.x = ball1.position.x;
+    // a.y = ball1.position.y;
+    // b.x = ball2.position.x;
+    // b.y = ball2.position.y;
+    // a.height = 2;
+    // b.height = 2;
+    // a.width = 2;
+    // a.width = 2;
+    // if(detect_collision(a, b))
+    // {
+      // ball1.speed *= -1;
+      // ball2.speed *= -1;
+    // }
+    // camera_rotation_angle += 1;
 }
 
 /* Initialize the OpenGL rendering properties */
@@ -113,9 +167,12 @@ void initGL(GLFWwindow *window, int width, int height) {
     /* Objects should be created before any other gl function and shaders */
     // Create the models
 
-    ball1       = Ball(2,  3, COLOR_RED);
-    ball2       = Ball(2, -3, COLOR_GREEN);
-    ball2.speed *= -1;
+    // ball1       = Ball(2,  3, COLOR_RED);
+    // ball2       = Ball(2, -3, COLOR_GREEN);
+
+    rafale      = Rafale(0, 0);
+
+    // ball2.speed *= -1;
 
     // Create and compile our GLSL program from the shaders
     programID = LoadShaders("Sample_GL.vert", "Sample_GL.frag");
@@ -141,8 +198,6 @@ void initGL(GLFWwindow *window, int width, int height) {
 
 int main(int argc, char **argv) {
     srand(time(0));
-    int width  = 1000;
-    int height = 1000;
 
     window = initGLFW(width, height);
 
@@ -165,6 +220,9 @@ int main(int argc, char **argv) {
 
         // Poll for Keyboard and mouse events
         glfwPollEvents();
+
+        // Add usleep
+        usleep(12000);
     }
 
     quit(window);

@@ -5,46 +5,49 @@ Ball::Ball(float x, float y, color_t color) {
     this->position = glm::vec3(x, y, 0);
     this->rotation = 0;
     speed = 0.01;
+    float width = 1.0f;
+    float height = 1.0f;
+    float depth = 1.0f;
     // Our vertices. Three consecutive floats give a 3D vertex; Three consecutive vertices give a triangle.
     // A cube has 6 faces with 2 triangles each, so this makes 6*2=12 triangles, and 12*3 vertices
     static const GLfloat vertex_buffer_data[] = {
-        -1.0f,-1.0f,-1.0f, // triangle 1 : begin
-        -1.0f,-1.0f, 1.0f,
-        -1.0f, 1.0f, 1.0f, // triangle 1 : end
-        1.0f, 1.0f,-1.0f, // triangle 2 : begin
-        -1.0f,-1.0f,-1.0f,
-        -1.0f, 1.0f,-1.0f, // triangle 2 : end
-        1.0f,-1.0f, 1.0f,
-        -1.0f,-1.0f,-1.0f,
-        1.0f,-1.0f,-1.0f,
-        1.0f, 1.0f,-1.0f,
-        1.0f,-1.0f,-1.0f,
-        -1.0f,-1.0f,-1.0f,
-        -1.0f,-1.0f,-1.0f,
-        -1.0f, 1.0f, 1.0f,
-        -1.0f, 1.0f,-1.0f,
-        1.0f,-1.0f, 1.0f,
-        -1.0f,-1.0f, 1.0f,
-        -1.0f,-1.0f,-1.0f,
-        -1.0f, 1.0f, 1.0f,
-        -1.0f,-1.0f, 1.0f,
-        1.0f,-1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f,-1.0f,-1.0f,
-        1.0f, 1.0f,-1.0f,
-        1.0f,-1.0f,-1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f,-1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f,-1.0f,
-        -1.0f, 1.0f,-1.0f,
-        1.0f, 1.0f, 1.0f,
-        -1.0f, 1.0f,-1.0f,
-        -1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        -1.0f, 1.0f, 1.0f,
-        1.0f,-1.0f, 1.0f
-    };
+            -width, -height,  -depth, // triangle 1 : begin
+            -width, -height,   depth,
+            -width,  height,   depth, // triangle 1 : end
+             width,  height,  -depth, // triangle 2 : begin
+            -width, -height,  -depth,
+            -width,  height,  -depth, // triangle 2 : end
+             width, -height,   depth,
+            -width, -height,  -depth,
+             width, -height,  -depth,
+             width,  height,  -depth,
+             width, -height,  -depth,
+            -width, -height,  -depth,
+            -width, -height,  -depth,
+            -width,  height,   depth,
+            -width,  height,  -depth,
+             width, -height,   depth,
+            -width, -height,   depth,
+            -width, -height,  -depth,
+            -width,  height,   depth,
+            -width, -height,   depth,
+             width, -height,   depth,
+             width,  height,   depth,
+             width, -height,  -depth,
+             width,  height,  -depth,
+             width, -height,  -depth,
+             width,  height,   depth,
+             width, -height,   depth,
+             width,  height,   depth,
+             width,  height,  -depth,
+            -width,  height,  -depth,
+             width,  height,   depth,
+            -width,  height,  -depth,
+            -width,  height,   depth,
+             width,  height,   depth,
+            -width,  height,   depth,
+             width, -height,   depth
+        };
 
     this->object = create3DObject(GL_TRIANGLES, 12*3, vertex_buffer_data, color, GL_FILL);
 }
