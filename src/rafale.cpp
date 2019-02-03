@@ -4,7 +4,7 @@
 Rafale::Rafale(float x, float y) {
     this->position = glm::vec3(x, y, 0);
     this->rotation = 0;
-    speed = 0.01;
+    speed = 0.01f;
     this->yaw_ctrl = 0;
     this->pitch_ctrl = 0;
     this->roll_ctrl = 0;
@@ -48,7 +48,7 @@ Rafale::Rafale(float x, float y) {
             -width,  height,   depth,
              width, -height,   depth
         };
-        static const GLfloat vertex_buffer_data_2[] = {
+    static const GLfloat vertex_buffer_data_2[] = {
             //fin 1
             -width,   0.0f,  -depth/8, // triangle 1 : begin
             -width,   0.0f, 7*depth/8,
@@ -81,7 +81,7 @@ Rafale::Rafale(float x, float y) {
              width,   -height,   -depth,
              width,    height,   -depth
         };
-        static const GLfloat vertex_buffer_data_3[] = {
+    static const GLfloat vertex_buffer_data_3[] = {
             width/2, span/4+height,  -depth/4,
             width/2,        height,  -depth/4,
                0.0f,        height,-7*depth/8,
@@ -126,9 +126,12 @@ void Rafale::set_position(float x, float y) {
 }
 
 void Rafale::tick() {
-    // this->rotation += speed;
-    // this->position.x -= speed;
-    // this->position.y -= speed;
+    // Move in direction of nose to origin
+    this->position.x -= sin(this->yaw_ctrl   * M_PI/180.0f) * this->speed;
+    this->position.y += sin(this->pitch_ctrl * M_PI/180.0f) * this->speed;
+    this->position.z -= cos(this->yaw_ctrl   * M_PI/180.0f) * this->speed;
+    this->position.z -= cos(this->pitch_ctrl * M_PI/180.0f) * this->speed;
+    // printf("%f %f %f\n", this->position.x ,this->position.y, this->position.z);
 }
 
 void Rafale::pitch(bool up) {
@@ -140,9 +143,9 @@ void Rafale::pitch(bool up) {
 
 void Rafale::yaw(bool right) {
     if(right)
-        this->yaw_ctrl += 1;
-    else
         this->yaw_ctrl -= 1;
+    else
+        this->yaw_ctrl += 1;
 }
 
 void Rafale::roll(bool anticlockwise) {

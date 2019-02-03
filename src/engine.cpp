@@ -1,16 +1,17 @@
 #include "engine.h"
 
 Engine::Engine(int level) {
+    this->sea = Sea(100);
     this->rafale = Rafale(0,0);
-
 }
 
 void Engine::draw(glm::mat4 VP) {
+    this->sea.draw(VP);
     this->rafale.draw(VP);
 }
 
 void Engine::tick() {
-
+    this->rafale.tick();
 }
 
 void Engine::tick_input(GLFWwindow *window) {

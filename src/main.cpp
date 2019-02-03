@@ -22,9 +22,14 @@ const float height = 1000;
 float screen_zoom = 1, screen_center_x = 0, screen_center_y = 0;
 float camera_rotation_angle = 0;
 
-glm::vec3 eye (0, 0, 10);
+// Eye - Location of camera.
+glm::vec3 eye (0, 2, 10);
+
+// Target - Where is the camera looking at.
 glm::vec3 target(0, 0, 0);
+
 glm::vec3 up(0, 1, 0);
+// Up - Up vector defines tilt of camera.
 
 Timer t60(1.0 / 60);
 
@@ -35,17 +40,7 @@ void draw() {
     glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // use the loaded shader program
-    // Don't change unless you know what you are doing
     glUseProgram (programID);
-
-    // Eye - Location of camera. Don't change unless you are sure!!
-    // glm::vec3 eye (eye_x,eye_y,eye_z);
-
-    // Target - Where is the camera looking at.  Don't change unless you are sure!!
-    // glm::vec3 target (target_x, target_y, target_z);
-
-    // Up - Up vector defines tilt of camera.  Don't change unless you are sure!!
-    // glm::vec3 up (up_x, up_y, up_z);
 
     // Compute Camera matrix (view)
     Matrices.view = glm::lookAt( eye, target, up ); // Rotating Camera for 3D
@@ -72,8 +67,8 @@ void tick_input(GLFWwindow *window) {
     int tower_view = glfwGetKey(window, GLFW_KEY_4);
     int helicopter_view = glfwGetKey(window, GLFW_KEY_5);
     if(follow_cam_view) {
-        eye = glm::vec3 (0,3,12);
         target = engine.get_origin();
+        eye = glm::vec3 (target.x + 0,target.y + 3,target.z + 12);
         up = glm::vec3 (0,1,0);
     }
     if(top_view) {

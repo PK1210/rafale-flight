@@ -1,6 +1,7 @@
 #include "main.h"
 
 // Include objects
+#include "sea.h"
 #include "rafale.h"
 
 #ifndef ENGINE_H
@@ -17,6 +18,7 @@ public:
     glm::vec3 get_origin();
 private:
     Rafale rafale;
+    Sea sea;
 };
 
 #endif // ENGINE_H
