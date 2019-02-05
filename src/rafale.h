@@ -16,7 +16,8 @@ public:
     void roll(bool anticlockwise);
     glm::vec3 position;
 private:
-    VAO *object[2];
+    VAO *object[4];
+    glm::mat4 rotation_matrix;
     float rotation;
     double speed;
     float yaw_ctrl;

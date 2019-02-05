@@ -1,13 +1,15 @@
 #include "engine.h"
 
 Engine::Engine(int level) {
-    this->sea = Sea(100);
     this->rafale = Rafale(0,0);
+    this->sea = Sea(100);
+    this->tower = Tower(6,-10);
 }
 
 void Engine::draw(glm::mat4 VP) {
-    this->sea.draw(VP);
     this->rafale.draw(VP);
+    this->sea.draw(VP);
+    this->tower.draw(VP);
 }
 
 void Engine::tick() {

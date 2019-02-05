@@ -2,6 +2,7 @@
 
 // Include objects
 #include "sea.h"
+#include "tower.h"
 #include "rafale.h"
 
 #ifndef ENGINE_H
@@ -19,6 +20,7 @@ public:
 private:
     Rafale rafale;
     Sea sea;
+    Tower tower;
 };
 
 #endif // ENGINE_H

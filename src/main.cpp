@@ -43,6 +43,8 @@ void draw() {
     glUseProgram (programID);
 
     // Compute Camera matrix (view)
+    target = engine.get_origin();
+
     Matrices.view = glm::lookAt( eye, target, up ); // Rotating Camera for 3D
     // Matrices.view = glm::lookAt(glm::vec3(0, 0, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)); // Fixed camera for 2D (ortho) in XY plane
 
@@ -82,7 +84,7 @@ void tick_input(GLFWwindow *window) {
         up = glm::vec3 (0,0,-1);
     }
     if(tower_view) {
-        eye = glm::vec3 (-6,8,10);
+        eye = glm::vec3 (6,8,-10);
         target = engine.get_origin();
         up = glm::vec3 (0,100,0);
     }
