@@ -74,8 +74,8 @@ void tick_input(GLFWwindow *window) {
         up = glm::vec3 (0,1,0);
     }
     if(top_view) {
-        eye = glm::vec3 (0,25,0);
         target = engine.get_origin();
+        eye = glm::vec3 (target.x, target.y + 25, target.z);
         up = glm::vec3 (0,0,-1);
     }
     if(plane_view) {
@@ -84,7 +84,7 @@ void tick_input(GLFWwindow *window) {
         up = glm::vec3 (0,0,-1);
     }
     if(tower_view) {
-        eye = glm::vec3 (6,8,-10);
+        eye = glm::vec3 (6,25,-10);
         target = engine.get_origin();
         up = glm::vec3 (0,100,0);
     }

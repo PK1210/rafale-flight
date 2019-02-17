@@ -1,9 +1,12 @@
 #include "main.h"
 
 // Include objects
-#include "sea.h"
-#include "tower.h"
+#include "frustum.h"
+#include "island.h"
 #include "rafale.h"
+#include "sea.h"
+#include "ship.h"
+#include "tower.h"
 
 #ifndef ENGINE_H
 #define ENGINE_H
@@ -18,7 +21,10 @@ public:
     void tick_input(GLFWwindow *window);
     glm::vec3 get_origin();
 private:
+    Frustum frustum;
+    Island island;
     Rafale rafale;
+    Ship ship;
     Sea sea;
     Tower tower;
 };

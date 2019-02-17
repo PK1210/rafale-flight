@@ -23,10 +23,10 @@ private:
     float yaw_ctrl;
     float pitch_ctrl;
     float roll_ctrl;
-    static constexpr float width = 1.0f;
-    static constexpr float height = 1.0f;
-    static constexpr float depth = 3.0f;
-    static constexpr float span = 3.0f;
+    static constexpr float width = 0.5f;
+    static constexpr float height = 0.5f;
+    static constexpr float depth = 1.5f;
+    static constexpr float span = 1.5f;
 };
 
 #endif // RAFALE_H
