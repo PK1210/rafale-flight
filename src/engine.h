@@ -3,6 +3,7 @@
 // Include objects
 #include "frustum.h"
 #include "island.h"
+#include "parachute.h"
 #include "rafale.h"
 #include "sea.h"
 #include "ship.h"
@@ -23,6 +24,7 @@ public:
 private:
     Frustum frustum;
     Island island;
+    Parachute parachute;
     Rafale rafale;
     Ship ship;
     Sea sea;

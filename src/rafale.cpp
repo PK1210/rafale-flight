@@ -53,23 +53,27 @@ Rafale::Rafale(float x, float y) {
     static const GLfloat vertex_buffer_data_2[] = {
             //fin 1
             -width,   0.0f,  -depth/8, // triangle 1 : begin
-            -width,   0.0f, 7*depth/8,
+            -width,   0.01f, 7*depth/8,
        -span-width,   0.0f,   depth/2, // triangle 1 : end
             -width,   0.0f,-7*depth/8, // triangle 2 : begin
-            -width,   0.0f,  -depth/4,
+            -width,   0.01f,  -depth/4,
      -span/2-width,   0.0f,  -depth/2, // triangle 2 : end
             // fin 2
              width,   0.0f, 7*depth/8, // triangle 1 : begin
-             width,   0.0f,  -depth/8,
+             width,   0.01f,  -depth/8,
         span+width,   0.0f,   depth/2, // triangle 1 : end
              width,   0.0f,-7*depth/8, // triangle 2 : begin
-             width,   0.0f,  -depth/4,
+             width,   0.01f,  -depth/4,
       span/2+width,   0.0f,  -depth/2, // triangle 2 : end
             // fin 3
-              0.0f,span/2+height,   depth, // triangle 1 : begin
+             -0.01f,span/2+height,   depth, // triangle 1 : begin
               0.0f,       height,   depth/2,
-              0.0f,       height,   depth, // triangle 1 : end
-            // Nose
+             -0.01f,       height,   depth, // triangle 1 : end
+            // fin 4
+              0.01f,span/2+height,   depth, // triangle 1 : begin
+              0.0f,        height,   depth/2,
+              0.01f,       height,   depth, // triangle 1 : end
+          // Nose
               0.0f,      0.0f,   -depth-3*span/4,
              width,    height,   -depth,
             -width,    height,   -depth,
@@ -107,7 +111,7 @@ Rafale::Rafale(float x, float y) {
     };
 
     this->object[0] = create3DObject(GL_TRIANGLES, 12*3, vertex_buffer_data , COLOR_RED, GL_FILL);
-    this->object[1] = create3DObject(GL_TRIANGLES,  9*3, vertex_buffer_data_2, COLOR_GREEN, GL_FILL);
+    this->object[1] = create3DObject(GL_TRIANGLES,  10*3, vertex_buffer_data_2, COLOR_GREEN, GL_FILL);
     this->object[2] = create3DObject(GL_TRIANGLES,  5*3, vertex_buffer_data_3, COLOR_BLUE, GL_FILL);
     this->object[3] = create3DObject(GL_TRIANGLES,  5*3, vertex_buffer_data_4, COLOR_BLACK, GL_FILL);
 }

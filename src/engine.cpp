@@ -3,6 +3,7 @@
 Engine::Engine(int level) {
     this->frustum = Frustum(4,5);
     this->island = Island(-2,-2);
+    this->parachute = Parachute(0,0);
     this->rafale = Rafale(0,0);
     this->ship = Ship(0,-4);
     this->sea = Sea(100);
@@ -12,6 +13,7 @@ Engine::Engine(int level) {
 void Engine::draw(glm::mat4 VP) {
     this->frustum.draw(VP);
     this->island.draw(VP);
+    this->parachute.draw(VP);
     this->rafale.draw(VP);
     this->ship.draw(VP);
     this->sea.draw(VP);
@@ -19,6 +21,7 @@ void Engine::draw(glm::mat4 VP) {
 }
 
 void Engine::tick() {
+    this->parachute.tick();
     this->rafale.tick();
     this->ship.tick();
 }
