@@ -77,7 +77,7 @@ void tick_input(GLFWwindow *window) {
     }
     if(top_view) {
         target = engine.get_origin();
-        eye = glm::vec3 (target.x, target.y + 25, target.z);
+        eye = glm::vec3 (target.x, target.y + 40, target.z);
         up = glm::vec3 (0,0,-1);
     }
     if(plane_view) {
@@ -158,7 +158,7 @@ int main(int argc, char **argv) {
         glfwPollEvents();
 
         // Add usleep
-        usleep(12000);
+        usleep(10000);
     }
 
     quit(window);

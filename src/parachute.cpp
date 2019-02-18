@@ -67,7 +67,7 @@ Parachute::Parachute(float x, float z) {
         };
 
     this->object[0] = create3DObject(GL_TRIANGLES, n*3, vertex_buffer_data, COLOR_ORANGE, GL_FILL);
-    this->object[1] = create3DObject(GL_TRIANGLES, 2*3, vertex_buffer_data_2, COLOR_BLACK, GL_LINE);
+    this->object[1] = create3DObject(GL_TRIANGLES, 2*3, vertex_buffer_data_2, COLOR_GREY, GL_LINE);
     this->object[2] = create3DObject(GL_TRIANGLES, 12*3, vertex_buffer_data_3, COLOR_MAROON, GL_FILL);
 }
 

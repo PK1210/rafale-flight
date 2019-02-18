@@ -41,7 +41,7 @@ Tower::Tower(float x, float y) {
             -width/2,  height/2,   depth/2,
              width/2, -height/2,   depth/2
         };
-    this->object = create3DObject(GL_TRIANGLES, 12*3, vertex_buffer_data , COLOR_BLACK, GL_FILL);
+    this->object = create3DObject(GL_TRIANGLES, 12*3, vertex_buffer_data , COLOR_GREY, GL_FILL);
 }
 
 void Tower::draw(glm::mat4 VP) {

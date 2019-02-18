@@ -1,8 +1,11 @@
 #include "engine.h"
 
 Engine::Engine(int level) {
+    this->altitude = Seven_segment(1,2,1,4);
+    this->compass = Compass(4,4,0);
     this->frustum = Frustum(4,5);
     this->island = Island(-2,-2);
+    this->missile = Missile(0,3,1);
     this->parachute = Parachute(0,0);
     this->rafale = Rafale(0,0);
     this->ring = Ring(1,5,-5);
@@ -12,8 +15,11 @@ Engine::Engine(int level) {
 }
 
 void Engine::draw(glm::mat4 VP) {
+    this->altitude.draw(VP);
+    this->compass.draw(VP);
     this->frustum.draw(VP);
     this->island.draw(VP);
+    this->missile.draw(VP);
     this->parachute.draw(VP);
     this->rafale.draw(VP);
     this->ring.draw(VP);
@@ -23,6 +29,7 @@ void Engine::draw(glm::mat4 VP) {
 }
 
 void Engine::tick() {
+    this->missile.tick();
     this->parachute.tick();
     this->rafale.tick();
     this->ship.tick();
