@@ -10,7 +10,6 @@ public:
     Frustum(float x, float z);
     void draw(glm::mat4 VP);
     glm::vec3 position;
-    void tick();
 private:
     VAO *object[2];
     float rotation;

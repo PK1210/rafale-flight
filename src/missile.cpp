@@ -21,15 +21,15 @@ Missile::Missile(float x, float y, float z) {
     }
     GLfloat vertex_buffer_data_2[n * 9] = {};
     for(int i=0;i<n;i++){
-        vertex_buffer_data_2[9 * i + 0] = radius_2 * cos(2 * M_PI/n * i);
+        vertex_buffer_data_2[9 * i + 0] = radius_2 * cos(2 * M_PI/n * i + M_PI/n);
         vertex_buffer_data_2[9 * i + 1] = height/2;
-        vertex_buffer_data_2[9 * i + 2] = radius_2 * sin(2 * M_PI/n * i);
-        vertex_buffer_data_2[9 * i + 3] = radius_2 * cos(2 * M_PI/n * (i + 1));
+        vertex_buffer_data_2[9 * i + 2] = radius_2 * sin(2 * M_PI/n * i + M_PI/n);
+        vertex_buffer_data_2[9 * i + 3] = radius_2 * cos(2 * M_PI/n * (i + 1) + M_PI/n);
         vertex_buffer_data_2[9 * i + 4] = height/2;
-        vertex_buffer_data_2[9 * i + 5] = radius_2 * sin(2 * M_PI/n * (i + 1 ));
-        vertex_buffer_data_2[9 * i + 6] = radius_1 * (cos(2 * M_PI/n * i) + cos(2 * M_PI/n * (i + 1)))/2;
+        vertex_buffer_data_2[9 * i + 5] = radius_2 * sin(2 * M_PI/n * (i + 1 ) + M_PI/n);
+        vertex_buffer_data_2[9 * i + 6] = radius_1 * (cos(2 * M_PI/n * i + M_PI/n) + cos(2 * M_PI/n * (i + 1) + M_PI/n))/2;
         vertex_buffer_data_2[9 * i + 7] = -height/2;
-        vertex_buffer_data_2[9 * i + 8] = radius_1 * (sin(2 * M_PI/n * i) + sin(2 * M_PI/n * (i + 1)))/2;
+        vertex_buffer_data_2[9 * i + 8] = radius_1 * (sin(2 * M_PI/n * i + M_PI/n) + sin(2 * M_PI/n * (i + 1) + M_PI/n))/2;
     }
     GLfloat vertex_buffer_data_3[n * 9] = {};
     for(int i=0;i<n;i++){

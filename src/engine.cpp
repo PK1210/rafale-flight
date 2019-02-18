@@ -33,6 +33,12 @@ void Engine::tick() {
     this->parachute.tick();
     this->rafale.tick();
     this->ship.tick();
+
+    //Check shoots and shoot
+    glm::vec4 * check = this->island.shoot();
+    if(check){
+        printf("%f %f %f\n",check->x,check->y,check->z);
+    }
 }
 
 void Engine::tick_input(GLFWwindow *window) {

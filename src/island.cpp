@@ -1,56 +1,65 @@
 #include "island.h"
 
+//function to make island
+void set_vertex_buffer(float width,float height,float height_addent,int index,VAO * object[])
+{
+     GLfloat vertex_buffer_data[] = {
+            -width/2, -height/2+height_addent,  -width/2, // triangle 1 : begin
+            -width/2, -height/2+height_addent,   width/2,
+            -width/2,  height/2+height_addent,   width/2, // triangle 1 : end
+             width/2,  height/2+height_addent,  -width/2, // triangle 2 : begin
+            -width/2, -height/2+height_addent,  -width/2,
+            -width/2,  height/2+height_addent,  -width/2, // triangle 2 : end
+
+             width/2,  height/2+height_addent,  -width/2,
+             width/2, -height/2+height_addent,  -width/2,
+            -width/2, -height/2+height_addent,  -width/2,
+            -width/2, -height/2+height_addent,  -width/2,
+            -width/2,  height/2+height_addent,   width/2,
+            -width/2,  height/2+height_addent,  -width/2,
+
+            -width/2,  height/2+height_addent,   width/2,
+            -width/2, -height/2+height_addent,   width/2,
+             width/2, -height/2+height_addent,   width/2,
+             width/2,  height/2+height_addent,   width/2,
+             width/2, -height/2+height_addent,  -width/2,
+             width/2,  height/2+height_addent,  -width/2,
+             width/2, -height/2+height_addent,  -width/2,
+             width/2,  height/2+height_addent,   width/2,
+             width/2, -height/2+height_addent,   width/2,
+
+
+             width/2,  height/2+height_addent,   width/2,
+            -width/2,  height/2+height_addent,   width/2,
+             width/2, -height/2+height_addent,   width/2
+        };
+
+     GLfloat vertex_buffer_data_2[] = {
+            width/2, -height/2+height_addent,   width/2,
+           -width/2, -height/2+height_addent,  -width/2,
+            width/2, -height/2+height_addent,  -width/2,
+            width/2, -height/2+height_addent,   width/2,
+           -width/2, -height/2+height_addent,   width/2,
+           -width/2, -height/2+height_addent,  -width/2,
+            width/2,  height/2+height_addent,   width/2,
+            width/2,  height/2+height_addent,  -width/2,
+           -width/2,  height/2+height_addent,  -width/2,
+            width/2,  height/2+height_addent,   width/2,
+           -width/2,  height/2+height_addent,  -width/2,
+           -width/2,  height/2+height_addent,   width/2
+        };
+        object[index+0] = create3DObject(GL_TRIANGLES, 8*3, vertex_buffer_data, COLOR_OCHRE, GL_FILL);
+        object[index+1] = create3DObject(GL_TRIANGLES, 4*3, vertex_buffer_data_2, COLOR_GRASS, GL_FILL);
+}
+
 Island::Island(float x, float z) {
     this->position = glm::vec3(x, height/2, z);
 
-    static const GLfloat vertex_buffer_data[] = {
-            -width/2, -height/2,  -width/2, // triangle 1 : begin
-            -width/2, -height/2,   width/2,
-            -width/2,  height/2,   width/2, // triangle 1 : end
-             width/2,  height/2,  -width/2, // triangle 2 : begin
-            -width/2, -height/2,  -width/2,
-            -width/2,  height/2,  -width/2, // triangle 2 : end
+    set_vertex_buffer(width,height,0,0,this->object);
+    set_vertex_buffer(width-1,height,height,2,this->object);
+    set_vertex_buffer(width-2,height,height*2,4,this->object);
 
-             width/2,  height/2,  -width/2,
-             width/2, -height/2,  -width/2,
-            -width/2, -height/2,  -width/2,
-            -width/2, -height/2,  -width/2,
-            -width/2,  height/2,   width/2,
-            -width/2,  height/2,  -width/2,
-
-            -width/2,  height/2,   width/2,
-            -width/2, -height/2,   width/2,
-             width/2, -height/2,   width/2,
-             width/2,  height/2,   width/2,
-             width/2, -height/2,  -width/2,
-             width/2,  height/2,  -width/2,
-             width/2, -height/2,  -width/2,
-             width/2,  height/2,   width/2,
-             width/2, -height/2,   width/2,
-
-
-             width/2,  height/2,   width/2,
-            -width/2,  height/2,   width/2,
-             width/2, -height/2,   width/2
-        };
-
-    static const GLfloat vertex_buffer_data_2[] = {
-            width/2, -height/2,   width/2,
-           -width/2, -height/2,  -width/2,
-            width/2, -height/2,  -width/2,
-            width/2, -height/2,   width/2,
-           -width/2, -height/2,   width/2,
-           -width/2, -height/2,  -width/2,
-            width/2,  height/2,   width/2,
-            width/2,  height/2,  -width/2,
-           -width/2,  height/2,  -width/2,
-            width/2,  height/2,   width/2,
-           -width/2,  height/2,  -width/2,
-           -width/2,  height/2,   width/2
-        };
-
-    this->object[0] = create3DObject(GL_TRIANGLES, 8*3, vertex_buffer_data, COLOR_OCHRE, GL_FILL);
-    this->object[1] = create3DObject(GL_TRIANGLES, 4*3, vertex_buffer_data_2, COLOR_GRASS, GL_FILL);
+    this->cannon = Cannon(x, height*3, z);
 }
 
 void Island::draw(glm::mat4 VP) {
@@ -61,6 +70,11 @@ void Island::draw(glm::mat4 VP) {
     Matrices.model *= translate;
     glm::mat4 MVP = VP * Matrices.model;
     glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
-    draw3DObject(this->object[0]);
-    draw3DObject(this->object[1]);
+    for(int i=0;i<6;i++)
+        draw3DObject(this->object[i]);
+    this->cannon.draw(VP);
+}
+
+glm::vec4 * Island::shoot() {
+    return this->cannon.shoot();
 }

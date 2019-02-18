@@ -1,4 +1,5 @@
 #include "main.h"
+#include "cannon.h"
 
 #ifndef ISLAND_H
 #define ISLAND_H
@@ -10,11 +11,13 @@ public:
     Island(float x, float z);
     void draw(glm::mat4 VP);
     glm::vec3 position;
+    glm::vec4 * shoot();
 private:
-    VAO *object[2];
-    static constexpr float length = 4.0f;
+    VAO *object[6];
+    Cannon cannon;
+    float max_height;
     static constexpr float width  = 4.0f;
-    static constexpr float height = 1.0f;
+    static constexpr float height = 0.4f;
 };
 
 #endif // ISLAND_H

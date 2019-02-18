@@ -1,8 +1,9 @@
-#include "frustum.h"
+#include "cannon.h"
 
-Frustum::Frustum(float x, float z) {
-    this->position = glm::vec3(x, height/2, z);
+Cannon::Cannon(float x, float y, float z) {
+    this->position = glm::vec3(x, y + height/2, z);
     this->rotation = 0.0f;
+    this->shoot_timer = 0;
 
     const int n = 24;
 
@@ -30,18 +31,32 @@ Frustum::Frustum(float x, float z) {
         vertex_buffer_data_2[9 * i + 7] = -height/2;
         vertex_buffer_data_2[9 * i + 8] = radius_1 * (sin(2 * M_PI/n * i + M_PI/n) + sin(2 * M_PI/n * (i + 1) + M_PI/n))/2;
     }
-    this->object[0] = create3DObject(GL_TRIANGLES, n*3, vertex_buffer_data, COLOR_GREY, GL_LINES);
-    this->object[1] = create3DObject(GL_TRIANGLES, n*3, vertex_buffer_data_2, COLOR_GREEN, GL_LINES);
+    this->object[0] = create3DObject(GL_TRIANGLES, n*3, vertex_buffer_data, COLOR_GREY, GL_FILL);
+    this->object[1] = create3DObject(GL_TRIANGLES, n*3, vertex_buffer_data_2, COLOR_BLACK, GL_LINES);
 }
 
-void Frustum::draw(glm::mat4 VP) {
+void Cannon::draw(glm::mat4 VP) {
     Matrices.model = glm::mat4(1.0f);
     glm::mat4 translate = glm::translate (this->position);    // glTranslatef
-    glm::mat4 rotate    = glm::rotate((float) (this->rotation * M_PI / 180.0f), glm::vec3(1, 0, 0));
+    // glm::mat4 rotate    = glm::rotate((float) (this->rotation * M_PI / 180.0f), glm::vec3(1, 0, 0));
 
     Matrices.model *= translate;
     glm::mat4 MVP = VP * Matrices.model;
     glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
     draw3DObject(this->object[0]);
     draw3DObject(this->object[1]);
+}
+
+glm::vec4 * Cannon::shoot() {
+    if(this->shoot_timer>wait_time){
+        this->shoot_timer=0;
+        // glm::vec4 *temp = (glm::vec4 *)malloc(sizeof(glm::vec4));
+        // temp = &(glm::vec4(this->position.x,this->position.y,this->position.z,this->rotation));
+        // return temp;
+    }
+    else{
+        this->shoot_timer++;
+        this->rotation++;
+    }
+    return NULL;
 }
