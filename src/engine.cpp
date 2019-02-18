@@ -5,6 +5,7 @@ Engine::Engine(int level) {
     this->island = Island(-2,-2);
     this->parachute = Parachute(0,0);
     this->rafale = Rafale(0,0);
+    this->ring = Ring(1,5,-5);
     this->ship = Ship(0,-4);
     this->sea = Sea(100);
     this->tower = Tower(6,-10);
@@ -15,6 +16,7 @@ void Engine::draw(glm::mat4 VP) {
     this->island.draw(VP);
     this->parachute.draw(VP);
     this->rafale.draw(VP);
+    this->ring.draw(VP);
     this->ship.draw(VP);
     this->sea.draw(VP);
     this->tower.draw(VP);
@@ -58,19 +60,12 @@ void Engine::tick_input(GLFWwindow *window) {
         //Clockwise roll control
         this->rafale.roll(false);
     }
-
-    // int key_ = glfwGetKey(window, GLFW_KEY_);
-    // int key_ = glfwGetKey(window, GLFW_KEY_);
-    // if(key_) {
-    //     // control
-    //     rafale.();
-    // }
-    // if(key_) {
-    //     // control
-    //     rafale.();
-    // }
 }
 
 glm::vec3 Engine::get_origin() {
     return rafale.position;
+}
+
+glm::vec3 Engine::get_orientation() {
+    return rafale.orientation();
 }

@@ -70,7 +70,9 @@ void tick_input(GLFWwindow *window) {
     int helicopter_view = glfwGetKey(window, GLFW_KEY_5);
     if(follow_cam_view) {
         target = engine.get_origin();
-        eye = glm::vec3 (target.x + 0,target.y + 3,target.z + 12);
+        float theta = engine.get_orientation().x;
+        theta = glm::radians(theta);
+        eye = glm::vec3 (target.x + 12*sin(theta), target.y + 3, target.z + 12*cos(theta));
         up = glm::vec3 (0,1,0);
     }
     if(top_view) {

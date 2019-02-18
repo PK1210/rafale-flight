@@ -146,12 +146,8 @@ void Rafale::tick() {
     this->position.z -= cos(this->yaw_ctrl * M_PI/180.0f) * cos(this->pitch_ctrl * M_PI/180.0f) * this->speed;
     // printf("%f %f %f %f %f\n", this->position.x ,this->position.y, this->position.z, this->yaw_ctrl, this->pitch_ctrl);
 }
-
-void Rafale::pitch(bool up) {
-    if(up)
-        this->pitch_ctrl += 1;
-    else
-        this->pitch_ctrl -= 1;
+glm::vec3 Rafale::orientation() {
+    return glm::vec3(this->yaw_ctrl, this->pitch_ctrl, this->roll_ctrl);
 }
 
 void Rafale::yaw(bool right) {
@@ -159,6 +155,13 @@ void Rafale::yaw(bool right) {
         this->yaw_ctrl -= 1;
     else
         this->yaw_ctrl += 1;
+}
+
+void Rafale::pitch(bool up) {
+    if(up)
+        this->pitch_ctrl += 1;
+    else
+        this->pitch_ctrl -= 1;
 }
 
 void Rafale::roll(bool anticlockwise) {

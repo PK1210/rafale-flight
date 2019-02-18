@@ -15,6 +15,7 @@ public:
     void pitch(bool up);
     void roll(bool anticlockwise);
     glm::vec3 position;
+    glm::vec3 orientation();
 private:
     VAO *object[4];
     glm::mat4 rotation_matrix;

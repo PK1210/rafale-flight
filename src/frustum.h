@@ -7,7 +7,7 @@
 class Frustum {
 public:
     Frustum() {}
-    Frustum(float x, float y);
+    Frustum(float x, float z);
     void draw(glm::mat4 VP);
     glm::vec3 position;
     void tick();

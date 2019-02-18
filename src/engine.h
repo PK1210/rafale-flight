@@ -5,6 +5,7 @@
 #include "island.h"
 #include "parachute.h"
 #include "rafale.h"
+#include "ring.h"
 #include "sea.h"
 #include "ship.h"
 #include "tower.h"
@@ -21,11 +22,13 @@ public:
     void collider();
     void tick_input(GLFWwindow *window);
     glm::vec3 get_origin();
+    glm::vec3 get_orientation();
 private:
     Frustum frustum;
     Island island;
     Parachute parachute;
     Rafale rafale;
+    Ring ring;
     Ship ship;
     Sea sea;
     Tower tower;
