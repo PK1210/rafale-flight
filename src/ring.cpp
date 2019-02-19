@@ -56,3 +56,9 @@ bounding_box_t Ring::get_bounding_box(){
         };
     return box;
 }
+
+bool Ring::die(bool force) {
+    if(force)
+        this->position.y = GRAVE;
+    return this->position.y == GRAVE;
+}

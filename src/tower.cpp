@@ -70,3 +70,9 @@ bounding_box_t Tower::get_bounding_box(){
         };
     return box;
 }
+
+bool Tower::die(bool force){
+    if(force)
+        this->position.y = GRAVE;
+    return this->position.y == GRAVE;
+}

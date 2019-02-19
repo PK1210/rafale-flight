@@ -13,6 +13,7 @@
 #include "sea.h"
 #include "seven_segment.h"
 #include "ship.h"
+#include "target.h"
 #include "tower.h"
 #include "volcano.h"
 
@@ -27,23 +28,26 @@ public:
     void tick();
     void collider();
     void tick_input(GLFWwindow *window);
+    void mouse_handler(int button,int action);
     glm::vec3 get_origin();
     glm::vec3 get_orientation();
 private:
     int counter;
-    Bomb bomb;
     Compass compass;
-    Fuel_up fuel_up;
-    Island island;
-    Missile missile;
-    std::vector<Parachute> parachutes;
     Rafale rafale;
-    std::vector<Ring> rings;
     Sea sea;
     Seven_segment altitude;
+    Target target;
+
+    std::vector<Bomb> bombs;
+    std::vector<Fuel_up> fuel_ups;
+    std::vector<Island> islands;
+    std::vector<Missile> missiles;
+    std::vector<Parachute> parachutes;
+    std::vector<Ring> rings;
     std::vector<Ship> ships;
-    Tower tower;
-    Volcano volcano;
+    std::vector<Tower> towers;
+    std::vector<Volcano> volcanoes;
 };
 
 #endif // ENGINE_H

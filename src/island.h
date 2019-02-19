@@ -13,6 +13,7 @@ public:
     glm::vec3 position;
     glm::vec4 * shoot();
     bounding_box_t get_bounding_box();
+    bool die(bool);
 private:
     VAO *object[6];
     Cannon cannon;

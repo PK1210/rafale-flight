@@ -64,8 +64,14 @@ bounding_box_t Ship::get_bounding_box(){
         this->position.y,   // y-coordinate of center
         this->position.z,   // z-coordinate of center
         length*2,         // x dimension height
-        height*4,         // y dimension height
-        width,             // z dimension height
+        height*8,         // y dimension height
+        width*2,          // z dimension height
         };
         return box;
+}
+
+bool Ship::die(bool force) {
+    if(force)
+        this->position.y = GRAVE;
+    return this->position.y == GRAVE;
 }

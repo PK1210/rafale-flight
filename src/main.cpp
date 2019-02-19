@@ -16,8 +16,8 @@ GLFWwindow *window;
 
 Engine engine;
 
-const float width = 1000;
-const float height = 1000;
+const float width = 1482.5;
+const float height = 1020;
 
 float screen_zoom = 1, screen_center_x = 0, screen_center_y = 0;
 float camera_rotation_angle = 0;
@@ -80,10 +80,19 @@ void tick_input(GLFWwindow *window) {
         View_controller = 4;
     if(helicopter_view)
         View_controller = 5;
+
     engine.tick_input(window);
 }
 
+/* Executed when a mouse button is pressed/released */
+void mouseButton(GLFWwindow *window, int button, int action, int mods) {
+    engine.mouse_handler(button,action);
+}
+
 void tick_elements() {
+    // Check for collision
+    engine.collider();
+
     engine.tick();
     // camera_rotation_angle += 1;
 }
@@ -143,13 +152,13 @@ int main(int argc, char **argv) {
                     target = engine.get_origin();
                     float theta = engine.get_orientation().x;
                     theta = glm::radians(theta);
-                    eye = glm::vec3 (target.x + 12*sin(theta), target.y + 3, target.z + 12*cos(theta));
+                    eye = glm::vec3 (target.x + 8*sin(theta), target.y + 4, target.z + 8*cos(theta));
                     up = glm::vec3 (0,1,0);
                     break;
                 }
                 case 2:{
                     target = engine.get_origin();
-                    eye = glm::vec3 (target.x, target.y + 40, target.z);
+                    eye = glm::vec3 (target.x, target.y + 32, target.z);
                     up = glm::vec3 (0,0,-1);
                     break;
                 }

@@ -71,3 +71,7 @@ bounding_box_t Volcano::get_bounding_box(){
         };
     return box;
 }
+
+bool Volcano::die(bool force) {
+    return false;
+}

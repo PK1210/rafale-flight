@@ -4,6 +4,7 @@
 Rafale::Rafale(float x, float y) {
     this->position = glm::vec3(x, y, 0);
     this->rotation = 0;
+    this->counter = 0;
     this->speed = 0.05f;
     this->yaw_ctrl = 0;
     this->pitch_ctrl = 0;
@@ -110,7 +111,7 @@ Rafale::Rafale(float x, float y) {
 
     };
 
-    this->object[0] = create3DObject(GL_TRIANGLES, 12*3, vertex_buffer_data , COLOR_ORANGE, GL_FILL);
+    this->object[0] = create3DObject(GL_TRIANGLES, 12*3, vertex_buffer_data , COLOR_ORANGE, GL_LINES);
     this->object[1] = create3DObject(GL_TRIANGLES,  10*3, vertex_buffer_data_2, COLOR_GREEN, GL_FILL);
     this->object[2] = create3DObject(GL_TRIANGLES,  5*3, vertex_buffer_data_3, COLOR_BLUE, GL_FILL);
     this->object[3] = create3DObject(GL_TRIANGLES,  5*3, vertex_buffer_data_4, COLOR_GREY, GL_FILL);
@@ -159,9 +160,9 @@ void Rafale::yaw(bool right) {
 
 void Rafale::pitch(bool up) {
     if(up)
-        this->pitch_ctrl += 1;
+        this->pitch_ctrl += 0.1f;
     else
-        this->pitch_ctrl -= 1;
+        this->pitch_ctrl -= 0.1f;
 }
 
 void Rafale::roll(bool anticlockwise) {
@@ -169,4 +170,20 @@ void Rafale::roll(bool anticlockwise) {
         this->roll_ctrl += 1;
     else
         this->roll_ctrl -= 1;
+}
+
+bounding_box_t Rafale::get_bounding_box() {
+    bounding_box_t box = {
+        this->position.x,    //x-coordinate
+        this->position.y,    //y-coordinate
+        this->position.z,    //z-coordinate
+        width*2,             //main body width
+        height*2,            //main body height
+        depth*2,             //main body depth
+    };
+    return box;
+}
+
+bool Rafale::shoot() {
+
 }

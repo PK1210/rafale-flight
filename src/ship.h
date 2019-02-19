@@ -9,13 +9,14 @@ public:
     Ship() {}
     Ship(float x, float y);
     void draw(glm::mat4 VP);
-    glm::vec3 position;
     void tick();
     bounding_box_t get_bounding_box();
+    bool die(bool);
 private:
     VAO *object[3];
     float rotation;
     float speed;
+    glm::vec3 position;
     static constexpr float length= 2.0f;
     static constexpr float width = 1.0f;
     static constexpr float depth =-1.0f;

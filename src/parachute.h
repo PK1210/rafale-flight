@@ -9,12 +9,13 @@ public:
     Parachute() {}
     Parachute(float x, float z);
     void draw(glm::mat4 VP);
-    glm::vec3 position;
     void tick();
     bounding_box_t get_bounding_box();
+    bool die(bool);
 private:
     VAO *object[3];
     float speed;
+    glm::vec3 position;
     // For parachute
     static constexpr float radius = 0.5f;
     static constexpr float height = 0.25f;

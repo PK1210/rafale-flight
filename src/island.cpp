@@ -90,3 +90,9 @@ bounding_box_t Island::get_bounding_box(){
         };
     return box;
 }
+
+bool Island::die(bool force) {
+    if(force)
+        this->position.y = GRAVE;
+    return this->position.y == GRAVE;
+}

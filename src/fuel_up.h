@@ -12,6 +12,7 @@ public:
     glm::vec3 position;
     void tick();
     bounding_box_t get_bounding_box();
+    bool die(bool);
 private:
     VAO *object[3];
     float rotation;

@@ -63,3 +63,9 @@ bounding_box_t Fuel_up::get_bounding_box(){
         };
     return box;
 }
+
+bool Fuel_up::die(bool force) {
+    if(force)
+        this->position.y = GRAVE;
+    return this->position.y == GRAVE;
+}

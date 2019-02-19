@@ -1,7 +1,7 @@
 #include "engine.h"
 
 // Filter
-template <typename T> bool filter(T& type) { return (type.position.y < GRAVE); }
+template <typename T> bool filter(T& type) { return type.die(0); }
 
 // Render object
 template <typename T> void draw_template(std::vector<T> &type, glm::mat4 VP) {
@@ -16,37 +16,57 @@ template <typename T> void tick_template(std::vector<T> &type) {
         it->tick();
 }
 
+// Detect collision from object
+template <typename T> bool detect_collision_template(std::vector<T> &type, Rafale &rafale) {
+    for (auto it = type.begin(); it != type.end(); it++) {
+        // bounding_box_t temp1 = rafale.get_bounding_box();
+        // bounding_box_t temp2 = it->get_bounding_box();
+        // printf("%f %f %f %f %f %f\n",temp1.x,temp1.y,temp1.z,temp2.x,temp2.y,temp2.z);
+        if(detect_collision(it->get_bounding_box(), rafale.get_bounding_box())){
+            // rafale.die();
+            it->die(1);
+            printf("Hi collision\n");
+            return true;
+        }
+    }
+}
+
 Engine::Engine(int level) {
     this->counter = 0;
-    this->altitude = Seven_segment(1,2,1,4);
-    this->bomb = Bomb(2,2,-2);
+    this->altitude = Seven_segment(1,2,1,0);
     this->compass = Compass(4,4,0);
-    this->fuel_up = Fuel_up(2,4,-2);
-    this->island = Island(-2,-2);
-    this->missile = Missile(0,3,1);
+    this->rafale = Rafale(0,0);
+    this->sea = Sea(SIDE);
+    this->target = Target(0,1,0);
+
+    this->fuel_ups.push_back(Fuel_up(-6,6,-6));
+    this->islands.push_back(Island(-8,-8));
+    this->missiles.push_back(Missile(0,3,1));
     this->parachutes.push_back(Parachute(0,0));
     this->rings.push_back(Ring(2,1,-6));
-    this->rafale = Rafale(0,0);
-    this->ships.push_back(Ship(0,-4));
-    this->sea = Sea(SIDE);
-    this->tower = Tower(6,-10);
-    this->volcano = Volcano(4,5);
+    this->ships.push_back(Ship(0,4));
+    this->towers.push_back(Tower(6,-10));
+    this->volcanoes.push_back(Volcano(7,4));
 }
 
 void Engine::draw(glm::mat4 VP) {
     this->altitude.draw(VP);
-    this->bomb.draw(VP);
     this->compass.draw(VP);
-    this->fuel_up.draw(VP);
-    this->volcano.draw(VP);
-    this->island.draw(VP);
-    this->missile.draw(VP);
+    this->target.draw(VP,false);
+
+    draw_template(this->bombs, VP);
+    draw_template(this->fuel_ups, VP);
+    draw_template(this->islands, VP);
+    draw_template(this->missiles, VP);
     draw_template(this->parachutes, VP);
     draw_template(this->rings, VP);
     draw_template(this->ships, VP);
+    draw_template(this->towers, VP);
+    draw_template(this->volcanoes, VP);
+
     this->rafale.draw(VP);
     this->sea.draw(VP);
-    this->tower.draw(VP);
+
 }
 
 void Engine::tick() {
@@ -59,26 +79,40 @@ void Engine::tick() {
     // Increment counter
     this->counter++;
 
-    if(this->counter%215 == 7)
+    //Generate stuffs
+    if(this->counter%79 == 7)
         this->parachutes.push_back(Parachute(rand()%mod - norm,rand()%mod - norm));
-    if(this->counter%379 == 7 && rings.size()<100)
+    if(this->counter%179 == 7 && rings.size()<100)
         this->rings.push_back(Ring(rand()%mod-norm,rand()%mod,rand()%mod-norm));
-    if(this->counter%379 == 7 && rings.size()<100)
+    if(this->counter%379 == 7 && ships.size()<100)
         this->ships.push_back(Ship(rand()%mod-norm,rand()%mod-norm));
 
-    this->bomb.tick();
     this->compass.tick();
-    this->fuel_up.tick();
-    this->missile.tick();
+
+    tick_template(this->bombs);
+    tick_template(this->fuel_ups);
+    tick_template(this->missiles);
     tick_template(this->parachutes);
     tick_template(this->ships);
+
     this->rafale.tick();
 
     //Check shoots and shoot
-    glm::vec4 * check = this->island.shoot();
-    if(check){
-        printf("%f %f %f\n",check->x,check->y,check->z);
-    }
+    // glm::vec4 * check = this->island.shoot();
+    // if(check){
+    //     printf("%f %f %f\n",check->x,check->y,check->z);
+    // }
+}
+
+void Engine::collider() {
+    detect_collision_template(this->fuel_ups, this->rafale);
+    detect_collision_template(this->islands, this->rafale);
+    detect_collision_template(this->rings, this->rafale);
+    detect_collision_template(this->ships, this->rafale);
+    detect_collision_template(this->towers, this->rafale);
+    detect_collision_template(this->volcanoes, this->rafale);
+    // detect_collision_template(this->volcanoes, this->rafale);
+    // detect_collision_template(this->volcanoes, this->rafale);
 }
 
 void Engine::tick_input(GLFWwindow *window) {
@@ -112,6 +146,27 @@ void Engine::tick_input(GLFWwindow *window) {
     if(key_e) {
         //Clockwise roll control
         this->rafale.roll(false);
+    }
+}
+
+void Engine::mouse_handler(int button, int action) {
+    switch (button) {
+    case GLFW_MOUSE_BUTTON_LEFT:
+        if (action == GLFW_PRESS) {
+            printf("Breathless\n");
+            return;
+        }
+        else if (action == GLFW_RELEASE) {
+            printf("Breath\n");
+        }
+        break;
+    case GLFW_MOUSE_BUTTON_RIGHT:
+        if (action == GLFW_RELEASE) {
+            this->bombs.push_back(Bomb(this->rafale.position.x, this->rafale.position.y, this->rafale.position.z));
+        }
+        break;
+    default:
+        break;
     }
 }
 

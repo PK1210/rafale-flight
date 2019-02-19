@@ -68,13 +68,19 @@ void Missile::tick(){
 }
 
 bounding_box_t Missile::get_bounding_box(){
-    // bounding_box_t box = {
-    //     this->position.x,   // x-coordinate of center
-    //     this->position.y,   // y-coordinate of center
-    //     this->position.z,   // z-coordinate of center
-    //     radius_1*2,         // x dimension height
-    //     height,             // y dimension height
-    //     radius_1*2,             // z dimension height
-    //     };
-    // return box;
+    bounding_box_t box = {
+        this->position.x,   // x-coordinate of center
+        this->position.y,   // y-coordinate of center
+        this->position.z,   // z-coordinate of center
+        radius_1,         // x dimension height
+        height,             // y dimension height
+        radius_1,             // z dimension height
+        };
+    return box;
+}
+
+bool Missile::die(bool force) {
+    if(force)
+        this->position.y = GRAVE;
+    return this->position.y == GRAVE;
 }

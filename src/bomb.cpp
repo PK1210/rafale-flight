@@ -1,11 +1,11 @@
 #include "bomb.h"
 
 Bomb::Bomb(float x, float y, float z) {
-    this->position = glm::vec3(x, height/2 + y, z);
+    this->position = glm::vec3(x, y, z);
     this->speed = 0.0f;
     this->rotation = 0.0f;
 
-    const int n = 24;
+    const int n = 16;
 
     GLfloat vertex_buffer_data[n * 9] = {};
     for(int i=0;i<n;i++){
@@ -90,8 +90,8 @@ void Bomb::draw(glm::mat4 VP) {
 }
 
 void Bomb::tick() {
-    this->speed += GRAVITY;
-    // this->position.y -= this->speed;
+    this->speed += GRAVITY/2;
+    this->position.y -= this->speed;
 }
 
 bounding_box_t Bomb::get_bounding_box(){
@@ -104,4 +104,10 @@ bounding_box_t Bomb::get_bounding_box(){
         height,             // z dimension height
         };
     return box;
+}
+
+bool Bomb::die(bool force) {
+    if(force)
+        this->position.y = GRAVE;
+    return this->position.y == GRAVE;
 }
