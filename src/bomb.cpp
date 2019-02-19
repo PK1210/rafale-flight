@@ -3,66 +3,66 @@
 Bomb::Bomb(float x, float y, float z) {
     this->position = glm::vec3(x, height/2 + y, z);
     this->speed = 0.0f;
-    this->rotation = 90.0f;
+    this->rotation = 0.0f;
 
     const int n = 24;
 
     GLfloat vertex_buffer_data[n * 9] = {};
     for(int i=0;i<n;i++){
         vertex_buffer_data[9 * i + 0] = radius_1 * cos(2 * M_PI/n * i);
-        vertex_buffer_data[9 * i + 1] = -height/2;
-        vertex_buffer_data[9 * i + 2] = radius_1 * sin(2 * M_PI/n * i);
+        vertex_buffer_data[9 * i + 1] = radius_1 * sin(2 * M_PI/n * i);
+        vertex_buffer_data[9 * i + 2] = -height/2;
         vertex_buffer_data[9 * i + 3] = radius_1 * cos(2 * M_PI/n * (i + 1));
-        vertex_buffer_data[9 * i + 4] = -height/2;
-        vertex_buffer_data[9 * i + 5] = radius_1 * sin(2 * M_PI/n * (i + 1 ));
+        vertex_buffer_data[9 * i + 4] = radius_1 * sin(2 * M_PI/n * (i + 1 ));
+        vertex_buffer_data[9 * i + 5] = -height/2;
         vertex_buffer_data[9 * i + 6] = radius_2 * (cos(2 * M_PI/n * i) + cos(2 * M_PI/n * (i + 1)))/2;
-        vertex_buffer_data[9 * i + 7] = 0.0f;
-        vertex_buffer_data[9 * i + 8] = radius_2 * (sin(2 * M_PI/n * i) + sin(2 * M_PI/n * (i + 1)))/2;
+        vertex_buffer_data[9 * i + 7] = radius_2 * (sin(2 * M_PI/n * i) + sin(2 * M_PI/n * (i + 1)))/2;
+        vertex_buffer_data[9 * i + 8] = 0.0f;
     }
     GLfloat vertex_buffer_data_2[n * 9] = {};
     for(int i=0;i<n;i++){
         vertex_buffer_data_2[9 * i + 0] = radius_2 * cos(2 * M_PI/n * i + M_PI/n);
-        vertex_buffer_data_2[9 * i + 1] = 0.0f;
-        vertex_buffer_data_2[9 * i + 2] = radius_2 * sin(2 * M_PI/n * i + M_PI/n);
+        vertex_buffer_data_2[9 * i + 1] = radius_2 * sin(2 * M_PI/n * i + M_PI/n);
+        vertex_buffer_data_2[9 * i + 2] = 0.0f;
         vertex_buffer_data_2[9 * i + 3] = radius_2 * cos(2 * M_PI/n * (i + 1) + M_PI/n);
-        vertex_buffer_data_2[9 * i + 4] = 0.0f;
-        vertex_buffer_data_2[9 * i + 5] = radius_2 * sin(2 * M_PI/n * (i + 1 ) + M_PI/n);
+        vertex_buffer_data_2[9 * i + 4] = radius_2 * sin(2 * M_PI/n * (i + 1 ) + M_PI/n);
+        vertex_buffer_data_2[9 * i + 5] = 0.0f;
         vertex_buffer_data_2[9 * i + 6] = radius_1 * (cos(2 * M_PI/n * i + M_PI/n) + cos(2 * M_PI/n * (i + 1) + M_PI/n))/2;
-        vertex_buffer_data_2[9 * i + 7] = -height/2;
-        vertex_buffer_data_2[9 * i + 8] = radius_1 * (sin(2 * M_PI/n * i + M_PI/n) + sin(2 * M_PI/n * (i + 1) + M_PI/n))/2;
+        vertex_buffer_data_2[9 * i + 7] = radius_1 * (sin(2 * M_PI/n * i + M_PI/n) + sin(2 * M_PI/n * (i + 1) + M_PI/n))/2;
+        vertex_buffer_data_2[9 * i + 8] = -height/2;
     }
     GLfloat vertex_buffer_data_3[n * 9] = {};
     for(int i=0;i<n;i++){
         vertex_buffer_data_3[9 * i + 0] = radius_1 * cos(2 * M_PI/n * i);
-        vertex_buffer_data_3[9 * i + 1] = height/2;
-        vertex_buffer_data_3[9 * i + 2] = radius_1 * sin(2 * M_PI/n * i);
+        vertex_buffer_data_3[9 * i + 1] = radius_1 * sin(2 * M_PI/n * i);
+        vertex_buffer_data_3[9 * i + 2] = height/2;
         vertex_buffer_data_3[9 * i + 3] = radius_1 * cos(2 * M_PI/n * (i + 1));
-        vertex_buffer_data_3[9 * i + 4] = height/2;
-        vertex_buffer_data_3[9 * i + 5] = radius_1 * sin(2 * M_PI/n * (i + 1 ));
+        vertex_buffer_data_3[9 * i + 4] = radius_1 * sin(2 * M_PI/n * (i + 1 ));
+        vertex_buffer_data_3[9 * i + 5] = height/2;
         vertex_buffer_data_3[9 * i + 6] = radius_2 * (cos(2 * M_PI/n * i) + cos(2 * M_PI/n * (i + 1)))/2;
-        vertex_buffer_data_3[9 * i + 7] = 0.0f;
-        vertex_buffer_data_3[9 * i + 8] = radius_2 * (sin(2 * M_PI/n * i) + sin(2 * M_PI/n * (i + 1)))/2;
+        vertex_buffer_data_3[9 * i + 7] = radius_2 * (sin(2 * M_PI/n * i) + sin(2 * M_PI/n * (i + 1)))/2;
+        vertex_buffer_data_3[9 * i + 8] = 0.0f;
     }
     GLfloat vertex_buffer_data_4[n * 9] = {};
     for(int i=0;i<n;i++){
         vertex_buffer_data_4[9 * i + 0] = radius_2 * cos(2 * M_PI/n * i + M_PI/n);
-        vertex_buffer_data_4[9 * i + 1] = 0.0f;
-        vertex_buffer_data_4[9 * i + 2] = radius_2 * sin(2 * M_PI/n * i + M_PI/n);
+        vertex_buffer_data_4[9 * i + 1] = radius_2 * sin(2 * M_PI/n * i + M_PI/n);
+        vertex_buffer_data_4[9 * i + 2] = 0.0f;
         vertex_buffer_data_4[9 * i + 3] = radius_2 * cos(2 * M_PI/n * (i + 1) + M_PI/n);
-        vertex_buffer_data_4[9 * i + 4] = 0.0f;
-        vertex_buffer_data_4[9 * i + 5] = radius_2 * sin(2 * M_PI/n * (i + 1 ) + M_PI/n);
+        vertex_buffer_data_4[9 * i + 4] = radius_2 * sin(2 * M_PI/n * (i + 1 ) + M_PI/n);
+        vertex_buffer_data_4[9 * i + 5] = 0.0f;
         vertex_buffer_data_4[9 * i + 6] = radius_1 * (cos(2 * M_PI/n * i + M_PI/n) + cos(2 * M_PI/n * (i + 1) + M_PI/n))/2;
-        vertex_buffer_data_4[9 * i + 7] = height/2;
-        vertex_buffer_data_4[9 * i + 8] = radius_1 * (sin(2 * M_PI/n * i + M_PI/n) + sin(2 * M_PI/n * (i + 1) + M_PI/n))/2;
+        vertex_buffer_data_4[9 * i + 7] = radius_1 * (sin(2 * M_PI/n * i + M_PI/n) + sin(2 * M_PI/n * (i + 1) + M_PI/n))/2;
+        vertex_buffer_data_4[9 * i + 8] = height/2;
     }
     GLfloat vertex_buffer_data_5[n * 9] = {};
     for(int i=0;i<n;i++){
         vertex_buffer_data_5[9 * i + 0] = radius_2 * cos(2 * M_PI/n * i + M_PI/n);
-        vertex_buffer_data_5[9 * i + 1] = 0.0f;
-        vertex_buffer_data_5[9 * i + 2] = radius_2 * sin(2 * M_PI/n * i + M_PI/n);
+        vertex_buffer_data_5[9 * i + 1] = radius_2 * sin(2 * M_PI/n * i + M_PI/n);
+        vertex_buffer_data_5[9 * i + 2] = 0.0f;
         vertex_buffer_data_5[9 * i + 3] = radius_2 * cos(2 * M_PI/n * (i + 1) + M_PI/n);
-        vertex_buffer_data_5[9 * i + 4] = 0.0f;
-        vertex_buffer_data_5[9 * i + 5] = radius_2 * sin(2 * M_PI/n * (i + 1 ) + M_PI/n);
+        vertex_buffer_data_5[9 * i + 4] = radius_2 * sin(2 * M_PI/n * (i + 1 ) + M_PI/n);
+        vertex_buffer_data_5[9 * i + 5] = 0.0f;
         vertex_buffer_data_5[9 * i + 6] = 0.0f;
         vertex_buffer_data_5[9 * i + 7] = 0.0f;
         vertex_buffer_data_5[9 * i + 8] = 0.0f;
@@ -92,4 +92,16 @@ void Bomb::draw(glm::mat4 VP) {
 void Bomb::tick() {
     this->speed += GRAVITY;
     // this->position.y -= this->speed;
+}
+
+bounding_box_t Bomb::get_bounding_box(){
+    bounding_box_t box = {
+        this->position.x,   // x-coordinate of center
+        this->position.y,   // y-coordinate of center
+        this->position.z,   // z-coordinate of center
+        radius_1*2,         // x dimension height
+        radius_1*2,         // y dimension height
+        height,             // z dimension height
+        };
+    return box;
 }

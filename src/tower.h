@@ -10,6 +10,7 @@ public:
     Tower(float x, float y);
     void draw(glm::mat4 VP);
     glm::vec3 get_position();
+    bounding_box_t get_bounding_box();
 private:
     VAO *object;
     glm::vec3 position;

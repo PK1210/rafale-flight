@@ -13,9 +13,10 @@ public:
     void draw(glm::mat4 VP);
     void set_position(float x, float y, float z);
     void tick();
-    double speed;
+    bounding_box_t get_bounding_box();
 private:
     VAO *object;
+    double speed;
     static constexpr float side = 0.5f;
 };
 

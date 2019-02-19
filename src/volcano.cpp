@@ -59,3 +59,15 @@ void Volcano::draw(glm::mat4 VP) {
     draw3DObject(this->object[0]);
     draw3DObject(this->object[1]);
 }
+
+bounding_box_t Volcano::get_bounding_box(){
+    bounding_box_t box = {
+        this->position.x,   // x-coordinate of center
+        this->position.y,   // y-coordinate of center
+        this->position.z,   // z-coordinate of center
+        radius_1*2,         // x dimension height
+        height,             // y dimension height
+        radius_1*2,             // z dimension height
+        };
+    return box;
+}

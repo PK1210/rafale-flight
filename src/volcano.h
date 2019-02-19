@@ -10,6 +10,7 @@ public:
     Volcano(float x, float z);
     void draw(glm::mat4 VP);
     glm::vec3 position;
+    bounding_box_t get_bounding_box();
 private:
     VAO *object[3];
     float rotation;

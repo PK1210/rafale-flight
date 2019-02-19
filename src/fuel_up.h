@@ -11,11 +11,12 @@ public:
     void draw(glm::mat4 VP);
     glm::vec3 position;
     void tick();
+    bounding_box_t get_bounding_box();
 private:
     VAO *object[3];
     float rotation;
     static constexpr float side = 0.4f;
-    static constexpr float width = 0.2f;
+    static constexpr float width = side/2;
 };
 
 #endif // FUEL_UP_H

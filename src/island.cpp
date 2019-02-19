@@ -78,3 +78,15 @@ void Island::draw(glm::mat4 VP) {
 glm::vec4 * Island::shoot() {
     return this->cannon.shoot();
 }
+
+bounding_box_t Island::get_bounding_box(){
+    bounding_box_t box = {
+        this->position.x,   // x-coordinate of center
+        this->position.y,   // y-coordinate of center
+        this->position.z,   // z-coordinate of center
+        width,         // x dimension height
+        height*5,         // y dimension height
+        width,             // z dimension height
+        };
+    return box;
+}

@@ -1,4 +1,5 @@
 #include "main.h"
+#include <algorithm>
 
 // Include objects
 #include "bomb.h"
@@ -29,17 +30,18 @@ public:
     glm::vec3 get_origin();
     glm::vec3 get_orientation();
 private:
+    int counter;
     Bomb bomb;
     Compass compass;
     Fuel_up fuel_up;
     Island island;
     Missile missile;
-    Parachute parachute;
+    std::vector<Parachute> parachutes;
     Rafale rafale;
-    Ring ring;
+    std::vector<Ring> rings;
     Sea sea;
     Seven_segment altitude;
-    Ship ship;
+    std::vector<Ship> ships;
     Tower tower;
     Volcano volcano;
 };

@@ -58,3 +58,15 @@ void Tower::draw(glm::mat4 VP) {
 glm::vec3 Tower::get_position() {
     return this->position;
 }
+
+bounding_box_t Tower::get_bounding_box(){
+    bounding_box_t box = {
+        this->position.x,   // x-coordinate of center
+        this->position.y,   // y-coordinate of center
+        this->position.z,   // z-coordinate of center
+        width,         // x dimension height
+        height,             // y dimension height
+        depth,             // z dimension height
+        };
+    return box;
+}

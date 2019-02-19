@@ -12,6 +12,7 @@ public:
     void draw(glm::mat4 VP);
     glm::vec3 position;
     glm::vec4 * shoot();
+    bounding_box_t get_bounding_box();
 private:
     VAO *object[6];
     Cannon cannon;

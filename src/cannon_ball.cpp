@@ -69,6 +69,20 @@ void Cannon_ball::set_position(float x, float y, float z) {
 
 void Cannon_ball::tick() {
     this->rotation += 10;
+    if(abs(this->position.x)>abs(ARENA) || abs(this->position.z)>abs(ARENA))
+        this->position.y = GRAVE;
     // this->position.x -= speed;
     // this->position.y -= speed;
+}
+
+bounding_box_t Cannon_ball::get_bounding_box(){
+    bounding_box_t box = {
+        this->position.x,   // x-coordinate of center
+        this->position.y,   // y-coordinate of center
+        this->position.z,   // z-coordinate of center
+        side,         // x dimension height
+        side,             // y dimension height
+        side,             // z dimension height
+        };
+    return box;
 }

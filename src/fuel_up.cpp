@@ -51,3 +51,15 @@ void Fuel_up::draw(glm::mat4 VP) {
 void Fuel_up::tick() {
     this->rotation++;
 }
+
+bounding_box_t Fuel_up::get_bounding_box(){
+    bounding_box_t box = {
+        this->position.x,   // x-coordinate of center
+        this->position.y,   // y-coordinate of center
+        this->position.z,   // z-coordinate of center
+        side*2,         // x dimension height
+        0.25f,             // y dimension height
+        side*2,             // z dimension height
+        };
+    return box;
+}

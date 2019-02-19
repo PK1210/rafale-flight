@@ -1,17 +1,34 @@
 #include "engine.h"
 
+// Filter
+template <typename T> bool filter(T& type) { return (type.position.y < GRAVE); }
+
+// Render object
+template <typename T> void draw_template(std::vector<T> &type, glm::mat4 VP) {
+    type.erase(std::remove_if(type.begin(), type.end(), filter<T>), type.end());
+    for (auto it = type.begin(); it != type.end(); it++)
+        it->draw(VP);
+}
+
+//Tick object
+template <typename T> void tick_template(std::vector<T> &type) {
+    for (auto it = type.begin(); it != type.end(); it++)
+        it->tick();
+}
+
 Engine::Engine(int level) {
+    this->counter = 0;
     this->altitude = Seven_segment(1,2,1,4);
     this->bomb = Bomb(2,2,-2);
     this->compass = Compass(4,4,0);
     this->fuel_up = Fuel_up(2,4,-2);
     this->island = Island(-2,-2);
     this->missile = Missile(0,3,1);
-    this->parachute = Parachute(0,0);
+    this->parachutes.push_back(Parachute(0,0));
+    this->rings.push_back(Ring(2,1,-6));
     this->rafale = Rafale(0,0);
-    this->ring = Ring(1,5,-5);
-    this->ship = Ship(0,-4);
-    this->sea = Sea(100);
+    this->ships.push_back(Ship(0,-4));
+    this->sea = Sea(SIDE);
     this->tower = Tower(6,-10);
     this->volcano = Volcano(4,5);
 }
@@ -24,22 +41,38 @@ void Engine::draw(glm::mat4 VP) {
     this->volcano.draw(VP);
     this->island.draw(VP);
     this->missile.draw(VP);
-    this->parachute.draw(VP);
+    draw_template(this->parachutes, VP);
+    draw_template(this->rings, VP);
+    draw_template(this->ships, VP);
     this->rafale.draw(VP);
-    this->ring.draw(VP);
-    this->ship.draw(VP);
     this->sea.draw(VP);
     this->tower.draw(VP);
 }
 
 void Engine::tick() {
+
+    // Produce stuffs
+    static const int LOCAL = 50;
+    const int mod = int(LOCAL*2);
+    const int norm = mod>>1;
+
+    // Increment counter
+    this->counter++;
+
+    if(this->counter%215 == 7)
+        this->parachutes.push_back(Parachute(rand()%mod - norm,rand()%mod - norm));
+    if(this->counter%379 == 7 && rings.size()<100)
+        this->rings.push_back(Ring(rand()%mod-norm,rand()%mod,rand()%mod-norm));
+    if(this->counter%379 == 7 && rings.size()<100)
+        this->ships.push_back(Ship(rand()%mod-norm,rand()%mod-norm));
+
     this->bomb.tick();
     this->compass.tick();
     this->fuel_up.tick();
     this->missile.tick();
-    this->parachute.tick();
+    tick_template(this->parachutes);
+    tick_template(this->ships);
     this->rafale.tick();
-    this->ship.tick();
 
     //Check shoots and shoot
     glm::vec4 * check = this->island.shoot();

@@ -1,7 +1,7 @@
 #include "parachute.h"
 
 Parachute::Parachute(float x, float z) {
-    this->position = glm::vec3(x, 5, z);
+    this->position = glm::vec3(x, 12.5f, z);
     this->speed = 0;
 
     const int n = 6;
@@ -87,4 +87,16 @@ void Parachute::draw(glm::mat4 VP) {
 void Parachute::tick() {
     this->speed += GRAVITY/10;
     this->position.y -= this->speed;
+}
+
+bounding_box_t Parachute::get_bounding_box(){
+    bounding_box_t box = {
+        this->position.x,   // x-coordinate of center
+        this->position.y-width/2-space,   // y-coordinate of center
+        this->position.z,   // z-coordinate of center
+        length,         // x dimension height
+        width+space,         // y dimension height
+        depth,             // z dimension height
+        };
+    return box;
 }
