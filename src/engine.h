@@ -1,8 +1,9 @@
 #include "main.h"
 
 // Include objects
+#include "bomb.h"
 #include "compass.h"
-#include "frustum.h"
+#include "fuel_up.h"
 #include "island.h"
 #include "missile.h"
 #include "parachute.h"
@@ -12,6 +13,7 @@
 #include "seven_segment.h"
 #include "ship.h"
 #include "tower.h"
+#include "volcano.h"
 
 #ifndef ENGINE_H
 #define ENGINE_H
@@ -27,8 +29,9 @@ public:
     glm::vec3 get_origin();
     glm::vec3 get_orientation();
 private:
+    Bomb bomb;
     Compass compass;
-    Frustum frustum;
+    Fuel_up fuel_up;
     Island island;
     Missile missile;
     Parachute parachute;
@@ -38,6 +41,7 @@ private:
     Seven_segment altitude;
     Ship ship;
     Tower tower;
+    Volcano volcano;
 };
 
 #endif // ENGINE_H

@@ -2,8 +2,9 @@
 
 Engine::Engine(int level) {
     this->altitude = Seven_segment(1,2,1,4);
+    this->bomb = Bomb(2,2,-2);
     this->compass = Compass(4,4,0);
-    this->frustum = Frustum(4,5);
+    this->fuel_up = Fuel_up(2,4,-2);
     this->island = Island(-2,-2);
     this->missile = Missile(0,3,1);
     this->parachute = Parachute(0,0);
@@ -12,12 +13,15 @@ Engine::Engine(int level) {
     this->ship = Ship(0,-4);
     this->sea = Sea(100);
     this->tower = Tower(6,-10);
+    this->volcano = Volcano(4,5);
 }
 
 void Engine::draw(glm::mat4 VP) {
     this->altitude.draw(VP);
+    this->bomb.draw(VP);
     this->compass.draw(VP);
-    this->frustum.draw(VP);
+    this->fuel_up.draw(VP);
+    this->volcano.draw(VP);
     this->island.draw(VP);
     this->missile.draw(VP);
     this->parachute.draw(VP);
@@ -29,6 +33,9 @@ void Engine::draw(glm::mat4 VP) {
 }
 
 void Engine::tick() {
+    this->bomb.tick();
+    this->compass.tick();
+    this->fuel_up.tick();
     this->missile.tick();
     this->parachute.tick();
     this->rafale.tick();

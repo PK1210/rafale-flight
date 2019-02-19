@@ -13,9 +13,9 @@ public:
 private:
     VAO *object;
     glm::vec3 position;
-    static constexpr float width = 2.0f;
+    static constexpr float width = 1.5f;
     static constexpr float height = 8.0f;
-    static constexpr float depth = 2.0f;
+    static constexpr float depth = 1.5f;
 };
 
 #endif // TOWER_H

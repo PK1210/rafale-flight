@@ -36,9 +36,9 @@ Digit_display::Digit_display(float x, float y, float z, int digit) {
     this->position = glm::vec3(x, y, z);
     for(int i=0; i<7; i++){
         if(!decoder[digit][i])
-            this->segments[i] = Segment(x + vertex[i][0], y + vertex[i][1], z, vertex[i][2], COLOR_LIGHT_GREEN);
+            this->segments[i] = Segment(x + vertex[i][0], y + vertex[i][1], z, vertex[i][2],COLOR_DARK_GREEN );
         else
-            this->segments[i] = Segment(x + vertex[i][0], y + vertex[i][1], z, vertex[i][2], COLOR_DARK_GREEN);
+            this->segments[i] = Segment(x + vertex[i][0], y + vertex[i][1], z, vertex[i][2], COLOR_LIGHT_GREEN);
     }
 }
 

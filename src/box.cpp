@@ -1,5 +1,4 @@
 #include "box.h"
-#include "main.h"
 
 Box::Box(float x, float y, color_t color) {
     this->position = glm::vec3(x, y, 0);

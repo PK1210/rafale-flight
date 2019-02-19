@@ -110,7 +110,7 @@ Rafale::Rafale(float x, float y) {
 
     };
 
-    this->object[0] = create3DObject(GL_TRIANGLES, 12*3, vertex_buffer_data , COLOR_RED, GL_FILL);
+    this->object[0] = create3DObject(GL_TRIANGLES, 12*3, vertex_buffer_data , COLOR_ORANGE, GL_FILL);
     this->object[1] = create3DObject(GL_TRIANGLES,  10*3, vertex_buffer_data_2, COLOR_GREEN, GL_FILL);
     this->object[2] = create3DObject(GL_TRIANGLES,  5*3, vertex_buffer_data_3, COLOR_BLUE, GL_FILL);
     this->object[3] = create3DObject(GL_TRIANGLES,  5*3, vertex_buffer_data_4, COLOR_GREY, GL_FILL);

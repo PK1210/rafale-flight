@@ -33,6 +33,8 @@ glm::vec3 up(0, 1, 0);
 
 Timer t60(1.0 / 60);
 
+int View_controller = 1;
+
 /* Render the scene with openGL */
 /* Edit this function according to your assignment */
 void draw() {
@@ -68,35 +70,16 @@ void tick_input(GLFWwindow *window) {
     int plane_view = glfwGetKey(window, GLFW_KEY_3);
     int tower_view = glfwGetKey(window, GLFW_KEY_4);
     int helicopter_view = glfwGetKey(window, GLFW_KEY_5);
-    if(follow_cam_view) {
-        target = engine.get_origin();
-        float theta = engine.get_orientation().x;
-        theta = glm::radians(theta);
-        eye = glm::vec3 (target.x + 12*sin(theta), target.y + 3, target.z + 12*cos(theta));
-        up = glm::vec3 (0,1,0);
-    }
-    if(top_view) {
-        target = engine.get_origin();
-        eye = glm::vec3 (target.x, target.y + 40, target.z);
-        up = glm::vec3 (0,0,-1);
-    }
-    if(plane_view) {
-        glm::vec3 position = engine.get_origin();
-        glm::vec3 theta = engine.get_orientation();
-        eye = glm::vec3 (position.x, position.y, position.z);
-        target = engine.get_origin();
-        up = glm::vec3 (0,0,-1);
-    }
-    if(tower_view) {
-        eye = glm::vec3 (6,25,-10);
-        target = engine.get_origin();
-        up = glm::vec3 (0,100,0);
-    }
-    if(helicopter_view) {
-        eye = glm::vec3 (6,8,-10);
-        target = engine.get_origin();
-        up = glm::vec3 (0,100,0);
-    }
+    if(follow_cam_view)
+        View_controller = 1;
+    if(top_view)
+        View_controller = 2;
+    if(plane_view)
+        View_controller = 3;
+    if(tower_view)
+        View_controller = 4;
+    if(helicopter_view)
+        View_controller = 5;
     engine.tick_input(window);
 }
 
@@ -154,6 +137,43 @@ int main(int argc, char **argv) {
 
             tick_elements();
             tick_input(window);
+            switch(View_controller)
+            {
+                case 1:{
+                    target = engine.get_origin();
+                    float theta = engine.get_orientation().x;
+                    theta = glm::radians(theta);
+                    eye = glm::vec3 (target.x + 12*sin(theta), target.y + 3, target.z + 12*cos(theta));
+                    up = glm::vec3 (0,1,0);
+                    break;
+                }
+                case 2:{
+                    target = engine.get_origin();
+                    eye = glm::vec3 (target.x, target.y + 40, target.z);
+                    up = glm::vec3 (0,0,-1);
+                    break;
+                }
+                case 3:{
+                    glm::vec3 position = engine.get_origin();
+                    glm::vec3 theta = engine.get_orientation();
+                    eye = glm::vec3 (position.x, position.y, position.z);
+                    target = engine.get_origin();
+                    up = glm::vec3 (0,0,-1);
+                    break;
+                }
+                case 4:{
+                    eye = glm::vec3 (6,25,-10);
+                    target = engine.get_origin();
+                    up = glm::vec3 (0,100,0);
+                    break;
+                }
+                case 5:{
+                    eye = glm::vec3 (6,8,-10);
+                    target = engine.get_origin();
+                    up = glm::vec3 (0,100,0);
+                    break;
+                }
+            }
         }
 
         // Poll for Keyboard and mouse events

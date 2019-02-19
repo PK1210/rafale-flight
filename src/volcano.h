@@ -4,14 +4,14 @@
 #define FRUSTUM_H
 
 
-class Frustum {
+class Volcano {
 public:
-    Frustum() {}
-    Frustum(float x, float z);
+    Volcano() {}
+    Volcano(float x, float z);
     void draw(glm::mat4 VP);
     glm::vec3 position;
 private:
-    VAO *object[2];
+    VAO *object[3];
     float rotation;
     static constexpr float radius_1 = 2.0f;
     static constexpr float height = 4.0f;

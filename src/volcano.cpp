@@ -1,6 +1,6 @@
-#include "frustum.h"
+#include "volcano.h"
 
-Frustum::Frustum(float x, float z) {
+Volcano::Volcano(float x, float z) {
     this->position = glm::vec3(x, height/2, z);
     this->rotation = 0.0f;
 
@@ -30,18 +30,32 @@ Frustum::Frustum(float x, float z) {
         vertex_buffer_data_2[9 * i + 7] = -height/2;
         vertex_buffer_data_2[9 * i + 8] = radius_1 * (sin(2 * M_PI/n * i + M_PI/n) + sin(2 * M_PI/n * (i + 1) + M_PI/n))/2;
     }
-    this->object[0] = create3DObject(GL_TRIANGLES, n*3, vertex_buffer_data, COLOR_GREY, GL_LINES);
-    this->object[1] = create3DObject(GL_TRIANGLES, n*3, vertex_buffer_data_2, COLOR_GREEN, GL_LINES);
+    GLfloat vertex_buffer_data_3[n * 9] = {};
+    for(int i=0;i<n;i++){
+        vertex_buffer_data_3[9 * i + 0] = radius_1 * cos(2 * M_PI/n * i);
+        vertex_buffer_data_3[9 * i + 1] =  -height/2 + 0.01f;
+        vertex_buffer_data_3[9 * i + 2] = radius_1 * sin(2 * M_PI/n * i);
+        vertex_buffer_data_3[9 * i + 3] = radius_1 * cos(2 * M_PI/n * (i + 1));
+        vertex_buffer_data_3[9 * i + 4] =  -height/2 + 0.01f;
+        vertex_buffer_data_3[9 * i + 5] = radius_1 * sin(2 * M_PI/n * (i + 1 ));
+        vertex_buffer_data_3[9 * i + 6] =  0.0f;
+        vertex_buffer_data_3[9 * i + 7] =  -height/2 + 0.01f;
+        vertex_buffer_data_3[9 * i + 8] =  0.0f;
+    }
+    this->object[0] = create3DObject(GL_TRIANGLES, n*3, vertex_buffer_data, COLOR_YELLOW, GL_FILL);
+    this->object[1] = create3DObject(GL_TRIANGLES, n*3, vertex_buffer_data_2, COLOR_FIRE, GL_FILL);
+    this->object[2] = create3DObject(GL_TRIANGLES, n*3, vertex_buffer_data_3, COLOR_FIRE, GL_FILL);
 }
 
-void Frustum::draw(glm::mat4 VP) {
+void Volcano::draw(glm::mat4 VP) {
     Matrices.model = glm::mat4(1.0f);
     glm::mat4 translate = glm::translate (this->position);    // glTranslatef
-    glm::mat4 rotate    = glm::rotate((float) (this->rotation * M_PI / 180.0f), glm::vec3(1, 0, 0));
+    // glm::mat4 rotate    = glm::rotate((float) (this->rotation * M_PI / 180.0f), glm::vec3(1, 0, 0));
 
     Matrices.model *= translate;
     glm::mat4 MVP = VP * Matrices.model;
     glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
+    draw3DObject(this->object[2]);
     draw3DObject(this->object[0]);
     draw3DObject(this->object[1]);
 }
