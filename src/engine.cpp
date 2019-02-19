@@ -16,25 +16,52 @@ template <typename T> void tick_template(std::vector<T> &type) {
         it->tick();
 }
 
-// Detect collision from object
+// Detect collision from object and plane
 template <typename T> bool detect_collision_template(std::vector<T> &type, Rafale &rafale) {
     for (auto it = type.begin(); it != type.end(); it++) {
-        // bounding_box_t temp1 = rafale.get_bounding_box();
-        // bounding_box_t temp2 = it->get_bounding_box();
-        // printf("%f %f %f %f %f %f\n",temp1.x,temp1.y,temp1.z,temp2.x,temp2.y,temp2.z);
         if(detect_collision(it->get_bounding_box(), rafale.get_bounding_box())){
             // rafale.die();
             it->die(1);
-            printf("Hi collision\n");
+            // printf("Hi collision\n");
             return true;
+        }
+    }
+}
+
+// Detect collision from object and bomb
+template <typename T> bool bomb_detect_collision_template(std::vector<T> &type, std::vector<Bomb> &bombs) {
+    for (auto jt = bombs.begin(); jt != bombs.end(); jt++) {
+        for (auto it = type.begin(); it != type.end(); it++) {
+            if(detect_collision(it->get_bounding_box(), jt->get_bounding_box())){
+                it->die(1);
+                jt->die(1);
+                // printf("2 Object collision one bomb\n");
+                return true;
+            }
+        }
+    }
+}
+
+// Detect collision from object and bomb
+template <typename T> bool missile_detect_collision_template(std::vector<T> &type, std::vector<Missile> &missiles) {
+    for (auto jt = missiles.begin(); jt != missiles.end(); jt++) {
+        for (auto it = type.begin(); it != type.end(); it++) {
+            if(detect_collision(it->get_bounding_box(), jt->get_bounding_box())){
+                it->die(1);
+                jt->die(1);
+                // printf("2 Object collision one missile\n");
+                return true;
+            }
         }
     }
 }
 
 Engine::Engine(int level) {
     this->counter = 0;
-    this->altitude = Seven_segment(1,2,1,0);
+    this->score = 0;
+    this->altitude = Seven_segment(1,2,1);
     this->compass = Compass(4,4,0);
+    this->odometer = Odometer(5,5,-5);
     this->rafale = Rafale(0,0);
     this->sea = Sea(SIDE);
     this->target = Target(0,1,0);
@@ -50,8 +77,9 @@ Engine::Engine(int level) {
 }
 
 void Engine::draw(glm::mat4 VP) {
-    this->altitude.draw(VP);
-    this->compass.draw(VP);
+    this->altitude.draw(VP, this->score);
+    this->compass.draw(VP, this->rafale.unit_vector(),glm::vec3(0,0,1));
+    this->odometer.draw(VP, this->rafale.fuel_fill(0), glm::vec3(0,0,1));
     this->target.draw(VP,false);
 
     draw_template(this->bombs, VP);
@@ -87,7 +115,6 @@ void Engine::tick() {
     if(this->counter%379 == 7 && ships.size()<100)
         this->ships.push_back(Ship(rand()%mod-norm,rand()%mod-norm));
 
-    this->compass.tick();
 
     tick_template(this->bombs);
     tick_template(this->fuel_ups);
@@ -105,14 +132,30 @@ void Engine::tick() {
 }
 
 void Engine::collider() {
-    detect_collision_template(this->fuel_ups, this->rafale);
+    // Detect collision with plane
+    if(detect_collision_template(this->fuel_ups, this->rafale))
+        this->rafale.fuel_fill(1);
     detect_collision_template(this->islands, this->rafale);
-    detect_collision_template(this->rings, this->rafale);
+    if(detect_collision_template(this->rings, this->rafale))
+        this->score+=100;
     detect_collision_template(this->ships, this->rafale);
     detect_collision_template(this->towers, this->rafale);
     detect_collision_template(this->volcanoes, this->rafale);
     // detect_collision_template(this->volcanoes, this->rafale);
-    // detect_collision_template(this->volcanoes, this->rafale);
+
+    if(bomb_detect_collision_template(this->ships, this->bombs))
+        this->score+=10;
+    if(bomb_detect_collision_template(this->islands, this->bombs))
+        this->score+=1000;
+
+    // Detect collision with missile
+    if(missile_detect_collision_template(this->parachutes, this->missiles))
+        this->score+=1;
+    if(missile_detect_collision_template(this->ships, this->missiles))
+        this->score+=10;
+    if(missile_detect_collision_template(this->islands, this->missiles))
+        this->score+=100;
+
 }
 
 void Engine::tick_input(GLFWwindow *window) {

@@ -7,6 +7,7 @@
 #include "fuel_up.h"
 #include "island.h"
 #include "missile.h"
+#include "odometer.h"
 #include "parachute.h"
 #include "rafale.h"
 #include "ring.h"
@@ -33,7 +34,9 @@ public:
     glm::vec3 get_orientation();
 private:
     int counter;
+    int score;
     Compass compass;
+    Odometer odometer;
     Rafale rafale;
     Sea sea;
     Seven_segment altitude;

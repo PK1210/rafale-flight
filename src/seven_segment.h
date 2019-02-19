@@ -56,10 +56,10 @@ private:
 class Seven_segment {
 public:
     Seven_segment() {}
-    Seven_segment(float x, float y, float z, int number);
+    Seven_segment(float x, float y, float z);
     glm::vec3 position;
     float rotation;
-    void draw(glm::mat4 VP);
+    void draw(glm::mat4 VP, int number);
     void set_position(float x, float y, float z);
 private:
     VAO *object;

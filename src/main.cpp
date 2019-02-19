@@ -51,7 +51,7 @@ void draw() {
     // Matrices.view = glm::lookAt(glm::vec3(0, 0, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)); // Fixed camera for 2D (ortho) in XY plane
 
     // Compute ViewProject matrix as view/camera might not be changed for this frame (basic scenario)
-    Matrices.projection = glm::perspective(glm::radians(45.0f), float(width)/float(height), 1.0f, 150.f);
+    Matrices.projection = glm::perspective(glm::radians(45.0f), float(width)/float(height), 0.1f, 150.f);
     // Don't change unless you are sure!!
     glm::mat4 VP = Matrices.projection * Matrices.view;
 
@@ -183,6 +183,8 @@ int main(int argc, char **argv) {
                     break;
                 }
             }
+            // dashboard.set_position(eye+glm::normalize(target-eye)*)
+            // dashboard.set_rotation(eye-target, up)
         }
 
         // Poll for Keyboard and mouse events

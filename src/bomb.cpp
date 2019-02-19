@@ -90,7 +90,7 @@ void Bomb::draw(glm::mat4 VP) {
 }
 
 void Bomb::tick() {
-    this->speed += GRAVITY/2;
+    this->speed += GRAVITY*10;
     this->position.y -= this->speed;
 }
 

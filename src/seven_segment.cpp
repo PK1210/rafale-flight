@@ -61,14 +61,14 @@ void Digit_display::set_position(float x, float y, float z) {
     this->position = glm::vec3(x, y, z);
 }
 
-Seven_segment::Seven_segment(float x, float y, float z, int num) {
+Seven_segment::Seven_segment(float x, float y, float z) {
     this->position = glm::vec3(x, y, z);
     this->count = MAX_DIGITS;
 
-    for(int i=0;i<MAX_DIGITS;i++){
-        this->digits[i] = Digit_display(x + (MAX_DIGITS-i-1) * SEGMENT_LENGTH * 1.25f + SEGMENT_LENGTH, y, z, num%10);
-        num = num/10;
-    }
+    // for(int i=0;i<MAX_DIGITS;i++){
+    //     this->digits[i] = Digit_display(x + (MAX_DIGITS-i-1) * SEGMENT_LENGTH * 1.25f + SEGMENT_LENGTH, y, z, num%10);
+    //     num = num/10;
+    // }
 
     float width = SEGMENT_LENGTH * MAX_DIGITS * 1.5f;
     float height = SEGMENT_LENGTH * 2.5;
@@ -85,7 +85,7 @@ Seven_segment::Seven_segment(float x, float y, float z, int num) {
     this->object = create3DObject(GL_TRIANGLES, 2*3, vertex_buffer_data, COLOR_BLACK, GL_FILL);
 }
 
-void Seven_segment::draw(glm::mat4 VP) {
+void Seven_segment::draw(glm::mat4 VP, int num) {
     Matrices.model = glm::mat4(1.0f);
     glm::mat4 translate = glm::translate (this->position);    // glTranslatef
     glm::mat4 rotate    = glm::rotate((float) (this->rotation * M_PI / 180.0f), glm::vec3(1, 0, 0));
@@ -96,7 +96,9 @@ void Seven_segment::draw(glm::mat4 VP) {
     glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
     draw3DObject(this->object);
 
-    for(int i=0;i<this->count;i++) {
+    for(int i=0;i<MAX_DIGITS;i++){
+        this->digits[i] = Digit_display(this->position.x + (MAX_DIGITS-i-1) * SEGMENT_LENGTH * 1.25f + SEGMENT_LENGTH, this->position.y, this->position.z, num%10);
+        num = num/10;
         this->digits[i].draw(VP);
     }
 };

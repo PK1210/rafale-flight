@@ -1,21 +1,21 @@
 #include "main.h"
 
-#ifndef COMPASS_H
-#define COMPASS_H
+#ifndef DASHBOARD_H
+#define DASHBOARD_H
 
 
-class Compass {
+class Dashboard {
 public:
-    Compass() {}
-    Compass(float x, float y, float z);
+    Dashboard() {}
+    Dashboard(glm::vec3 position);
     void draw(glm::mat4 VP, glm::vec3 unit_vector, glm::vec3 dashboard_normal);
     void set_position(glm::vec3 position);
 private:
-    VAO *object[3];
-    float rotation;
+    VAO *object[2];
     glm::vec3 position;
+    float rotation;
     static constexpr float side = 0.5f;
-    static constexpr float width = 0.1f;
+    static constexpr float thickness = 0.1f;
 };
 
-#endif // COMPASS_H
+#endif // DASHBOARD_H

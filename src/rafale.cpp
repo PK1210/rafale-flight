@@ -5,6 +5,7 @@ Rafale::Rafale(float x, float y) {
     this->position = glm::vec3(x, y, 0);
     this->rotation = 0;
     this->counter = 0;
+    this->fuel = MAX_FUEL;
     this->speed = 0.05f;
     this->yaw_ctrl = 0;
     this->pitch_ctrl = 0;
@@ -145,6 +146,8 @@ void Rafale::tick() {
     this->position.y += sin(this->pitch_ctrl * M_PI/180.0f) * this->speed;
     this->position.x -= sin(this->yaw_ctrl   * M_PI/180.0f) * cos(this->pitch_ctrl * M_PI/180.0f) * this->speed;
     this->position.z -= cos(this->yaw_ctrl * M_PI/180.0f) * cos(this->pitch_ctrl * M_PI/180.0f) * this->speed;
+
+    this->fuel -= 1;
     // printf("%f %f %f %f %f\n", this->position.x ,this->position.y, this->position.z, this->yaw_ctrl, this->pitch_ctrl);
 }
 glm::vec3 Rafale::orientation() {
@@ -160,9 +163,9 @@ void Rafale::yaw(bool right) {
 
 void Rafale::pitch(bool up) {
     if(up)
-        this->pitch_ctrl += 0.1f;
+        this->pitch_ctrl += 1.125f;
     else
-        this->pitch_ctrl -= 0.1f;
+        this->pitch_ctrl -= 1.125f;
 }
 
 void Rafale::roll(bool anticlockwise) {
@@ -184,6 +187,17 @@ bounding_box_t Rafale::get_bounding_box() {
     return box;
 }
 
-bool Rafale::shoot() {
-
+glm::vec3 Rafale::unit_vector(){
+    glm::vec3 temp;
+    temp.y = sin(this->pitch_ctrl * M_PI/180.0f);
+    temp.x = sin(this->yaw_ctrl   * M_PI/180.0f) * cos(this->pitch_ctrl * M_PI/180.0f);
+    temp.z = cos(this->yaw_ctrl * M_PI/180.0f) * cos(this->pitch_ctrl * M_PI/180.0f);
+    temp = glm::normalize(temp);
+    return temp;
+}
+float Rafale::fuel_fill(bool up) {
+    //up =1 increase fuel
+    this->fuel = MAX_FUEL;
+    //up = 0 return current fuel in normalized;
+    return this->fuel/MAX_FUEL;
 }

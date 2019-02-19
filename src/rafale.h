@@ -18,6 +18,8 @@ public:
     glm::vec3 orientation();
     bounding_box_t get_bounding_box();
     bool shoot();
+    glm::vec3 unit_vector();
+    float fuel_fill(bool up);
 private:
     VAO *object[4];
     glm::mat4 rotation_matrix;
@@ -27,10 +29,13 @@ private:
     float yaw_ctrl;
     float pitch_ctrl;
     float roll_ctrl;
+    int fuel;
     static constexpr float width = 0.3f;
     static constexpr float height = 0.3f;
     static constexpr float depth = 0.9f;
     static constexpr float span = 0.8f;
+    static constexpr int MAX_FUEL = 10000;
+    static constexpr float MAX_SPEED = 0.8f;
 };
 
 #endif // RAFALE_H
