@@ -1,7 +1,7 @@
 #include "bomb.h"
 
-Bomb::Bomb(float x, float y, float z) {
-    this->position = glm::vec3(x, y, z);
+Bomb::Bomb(glm::vec3 new_position) {
+    this->position = new_position;
     this->speed = 0.0f;
     this->rotation = 0.0f;
 

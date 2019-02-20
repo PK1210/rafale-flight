@@ -96,3 +96,7 @@ bool Island::die(bool force) {
         this->position.y = GRAVE;
     return this->position.y == GRAVE;
 }
+
+glm::vec3 Island::get_position() {
+    return this->position;
+}

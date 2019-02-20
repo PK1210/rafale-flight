@@ -7,7 +7,7 @@
 class Bomb {
 public:
     Bomb() {}
-    Bomb(float x,float y,float z);
+    Bomb(glm::vec3 new_position);
     void draw(glm::mat4 VP);
     void tick();
     bounding_box_t get_bounding_box();

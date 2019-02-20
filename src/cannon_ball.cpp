@@ -48,13 +48,14 @@ Cannon_ball::Cannon_ball(float x, float y, float z, float speed) {
              width/2, -height/2,   depth/2
         };
 
-    this->object = create3DObject(GL_TRIANGLES, 12*3, vertex_buffer_data, COLOR_GREY, GL_FILL);
+    this->object = create3DObject(GL_TRIANGLES, 12*3, vertex_buffer_data, COLOR_MAROON, GL_FILL);
 }
 
 void Cannon_ball::draw(glm::mat4 VP) {
     Matrices.model = glm::mat4(1.0f);
     glm::mat4 translate = glm::translate (this->position);    // glTranslatef
-    glm::mat4 rotate    = glm::rotate((float) (this->rotation * M_PI / 180.0f), glm::vec3(1, 0, 0));
+    glm::mat4 rotate    = glm::rotate((float) (this->rotation * M_PI / 180.0f), glm::vec3(1, 0, 1));
+              rotate   *= glm::rotate((float) (this->rotation * M_PI / 180.0f), glm::vec3(0, 1, 0));
     // No need as coords centered at 0, 0, 0 of cube arouund which we waant to rotate
     // rotate          = rotate * glm::translate(glm::vec3(0, -0.6, 0));
     Matrices.model *= (translate * rotate);
@@ -68,7 +69,7 @@ void Cannon_ball::set_position(float x, float y, float z) {
 }
 
 void Cannon_ball::tick() {
-    this->rotation += 10;
+    this->rotation += 10.0f;
     if(abs(this->position.x)>abs(ARENA) || abs(this->position.z)>abs(ARENA))
         this->position.y = GRAVE;
     // this->position.x -= speed;
@@ -85,4 +86,10 @@ bounding_box_t Cannon_ball::get_bounding_box(){
         side,             // z dimension height
         };
     return box;
+}
+
+bool Cannon_ball::die(bool force) {
+    if(force)
+        this->position.y = GRAVE;
+    return this->position.y == GRAVE;
 }

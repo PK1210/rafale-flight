@@ -60,6 +60,7 @@ Engine::Engine(int level) {
     this->counter = 0;
     this->score = 0;
     this->altitude = Seven_segment(1,2,1);
+    this->arrow = Arrow(0,3,3);
     this->compass = Compass(4,4,0);
     this->odometer = Odometer(5,5,-5);
     this->rafale = Rafale(0,0);
@@ -78,6 +79,7 @@ Engine::Engine(int level) {
 
 void Engine::draw(glm::mat4 VP) {
     this->altitude.draw(VP, this->score);
+    this->arrow.draw(VP,glm::vec3(0,3,3),glm::normalize(this->islands.begin()->get_position()-this->rafale.get_position()));
     this->compass.draw(VP, this->rafale.unit_vector(),glm::vec3(0,0,1));
     this->odometer.draw(VP, this->rafale.fuel_fill(0), glm::vec3(0,0,1));
     this->target.draw(VP,false);
@@ -205,7 +207,7 @@ void Engine::mouse_handler(int button, int action) {
         break;
     case GLFW_MOUSE_BUTTON_RIGHT:
         if (action == GLFW_RELEASE) {
-            this->bombs.push_back(Bomb(this->rafale.position.x, this->rafale.position.y, this->rafale.position.z));
+            this->bombs.push_back(Bomb(this->rafale.get_position()));
         }
         break;
     default:

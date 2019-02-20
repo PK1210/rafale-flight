@@ -20,6 +20,7 @@ public:
     bool shoot();
     glm::vec3 unit_vector();
     float fuel_fill(bool up);
+    glm::vec3 get_position();
 private:
     VAO *object[4];
     glm::mat4 rotation_matrix;

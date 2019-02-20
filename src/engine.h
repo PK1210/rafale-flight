@@ -2,7 +2,9 @@
 #include <algorithm>
 
 // Include objects
+#include "arrow.h"
 #include "bomb.h"
+#include "cannon_ball.h"
 #include "compass.h"
 #include "fuel_up.h"
 #include "island.h"
@@ -35,6 +37,7 @@ public:
 private:
     int counter;
     int score;
+    Arrow arrow;
     Compass compass;
     Odometer odometer;
     Rafale rafale;
@@ -43,6 +46,7 @@ private:
     Target target;
 
     std::vector<Bomb> bombs;
+    std::vector<Cannon_ball> cannon_balls;
     std::vector<Fuel_up> fuel_ups;
     std::vector<Island> islands;
     std::vector<Missile> missiles;

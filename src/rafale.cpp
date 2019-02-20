@@ -201,3 +201,7 @@ float Rafale::fuel_fill(bool up) {
     //up = 0 return current fuel in normalized;
     return this->fuel/MAX_FUEL;
 }
+
+glm::vec3 Rafale::get_position() {
+    return this->position;
+}
