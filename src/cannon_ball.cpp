@@ -1,9 +1,9 @@
 #include "cannon_ball.h"
 
-Cannon_ball::Cannon_ball(float x, float y, float z, float speed) {
-    this->position = glm::vec3(x, y, z);
+Cannon_ball::Cannon_ball(glm::vec3 position, glm::vec3 unit_vector) {
+    this->position = position + glm::vec3(0,3.0f,0);
     this->rotation = 0;
-    this->speed = speed;
+    this->speed = (float)(rand()%MAX_SPEED)/(4 * MAX_SPEED) * unit_vector;
     float width = side;
     float height = side;
     float depth = side;
@@ -48,7 +48,7 @@ Cannon_ball::Cannon_ball(float x, float y, float z, float speed) {
              width/2, -height/2,   depth/2
         };
 
-    this->object = create3DObject(GL_TRIANGLES, 12*3, vertex_buffer_data, COLOR_MAROON, GL_FILL);
+    this->object = create3DObject(GL_TRIANGLES, 12*3, vertex_buffer_data, COLOR_MILITARY, GL_FILL);
 }
 
 void Cannon_ball::draw(glm::mat4 VP) {
@@ -72,8 +72,8 @@ void Cannon_ball::tick() {
     this->rotation += 10.0f;
     if(abs(this->position.x)>abs(ARENA) || abs(this->position.z)>abs(ARENA))
         this->position.y = GRAVE;
-    // this->position.x -= speed;
-    // this->position.y -= speed;
+    this->position += this->speed;
+    this->speed.y -= GRAVITY * 2;
 }
 
 bounding_box_t Cannon_ball::get_bounding_box(){

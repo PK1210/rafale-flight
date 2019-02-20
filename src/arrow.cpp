@@ -43,16 +43,16 @@ Arrow::Arrow(float x, float y, float z) {
         };
         static const GLfloat vertex_buffer_data_2[] = {
              width, 0.5f * height, width,
-              0.0f,0.75f * height,  0.0f,
+              0.0f, 1.0f * height,  0.0f,
             -width, 0.5f * height, width,
             -width, 0.5f * height, width,
-              0.0f,0.75f * height,  0.0f,
+              0.0f, 1.0f * height,  0.0f,
             -width, 0.5f * height,-width,
             -width, 0.5f * height,-width,
-              0.0f,0.75f * height,  0.0f,
+              0.0f, 1.0f * height,  0.0f,
              width, 0.5f * height,-width,
              width, 0.5f * height,-width,
-              0.0f,0.75f * height,  0.0f,
+              0.0f, 1.0f * height,  0.0f,
              width, 0.5f * height, width,
         };
 

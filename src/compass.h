@@ -14,8 +14,8 @@ private:
     VAO *object[3];
     float rotation;
     glm::vec3 position;
-    static constexpr float side = 0.05f;
-    static constexpr float width = 0.01f;
+    static constexpr float side = 0.1f;
+    static constexpr float width = 0.02f;
 };
 
 #endif // COMPASS_H

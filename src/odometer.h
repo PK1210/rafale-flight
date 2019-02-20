@@ -14,8 +14,8 @@ private:
     VAO *object[2];
     glm::vec3 position;
     float rotation;
-    static constexpr float radius = 0.08f;
-    static constexpr float thickness = 0.01f;
+    static constexpr float radius = 0.1f;
+    static constexpr float thickness = 0.0125f;
 };
 
 #endif // ODOMETER_H

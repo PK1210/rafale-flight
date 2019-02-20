@@ -12,11 +12,11 @@ Odometer::Odometer(float x, float y, float z) {
         vertex_buffer_data[9 * i + 0] = 0.0f;
         vertex_buffer_data[9 * i + 1] = 0.0f;
         vertex_buffer_data[9 * i + 2] = 0.0f;
-        vertex_buffer_data[9 * i + 3] = radius * cos(M_PI/n * i);
-        vertex_buffer_data[9 * i + 4] = radius * sin(M_PI/n * i);
+        vertex_buffer_data[9 * i + 3] = radius * cos(2.0f * M_PI/n * i);
+        vertex_buffer_data[9 * i + 4] = radius * sin(2.0f * M_PI/n * i);
         vertex_buffer_data[9 * i + 5] = 0.0f;
-        vertex_buffer_data[9 * i + 6] = radius * cos(M_PI/n * (i + 1));
-        vertex_buffer_data[9 * i + 7] = radius * sin(M_PI/n * (i + 1));
+        vertex_buffer_data[9 * i + 6] = radius * cos(2.0f * M_PI/n * (i + 1));
+        vertex_buffer_data[9 * i + 7] = radius * sin(2.0f * M_PI/n * (i + 1));
         vertex_buffer_data[9 * i + 8] = 0.0f;
     }
 
@@ -40,7 +40,7 @@ void Odometer::draw(float percent) {
 
     // Rotate only needle
     Matrices.model = glm::mat4(1.0f);
-    float angle = glm::asin(percent) + M_PI/2;
+    float angle = -glm::asin(percent)-M_PI/2;
 
     glm::mat4 rotate = glm::rotate(angle, glm::vec3(0,0,1));
     Matrices.model *= translate * rotate;

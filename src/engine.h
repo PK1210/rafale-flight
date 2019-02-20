@@ -16,6 +16,7 @@
 #include "sea.h"
 #include "seven_segment.h"
 #include "ship.h"
+#include "status_bar.h"
 #include "target.h"
 #include "tower.h"
 #include "volcano.h"
@@ -45,6 +46,7 @@ private:
     Rafale rafale;
     Sea sea;
     Seven_segment altitude;
+    Status_bar health_bar;
     Target target;
 
     std::vector<Bomb> bombs;

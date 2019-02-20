@@ -3,8 +3,8 @@
 #ifndef Digit_display_H
 #define Digit_display_H
 
-const float SEGMENT_LENGTH = 0.025f;
-const float THICKNESS = 0.003f;
+const float SEGMENT_LENGTH = 0.1f;
+const float THICKNESS = 0.005f;
 const int MAX_DIGITS = 4;
 
 const bool decoder[10][7] = {

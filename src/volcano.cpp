@@ -42,7 +42,7 @@ Volcano::Volcano(float x, float z) {
         vertex_buffer_data_3[9 * i + 7] =  -height/2 + 0.01f;
         vertex_buffer_data_3[9 * i + 8] =  0.0f;
     }
-    this->object[0] = create3DObject(GL_TRIANGLES, n*3, vertex_buffer_data, COLOR_YELLOW, GL_FILL);
+    this->object[0] = create3DObject(GL_TRIANGLES, n*3, vertex_buffer_data, COLOR_MAROON, GL_FILL);
     this->object[1] = create3DObject(GL_TRIANGLES, n*3, vertex_buffer_data_2, COLOR_FIRE, GL_FILL);
     this->object[2] = create3DObject(GL_TRIANGLES, n*3, vertex_buffer_data_3, COLOR_FIRE, GL_FILL);
 }

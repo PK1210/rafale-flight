@@ -9,6 +9,7 @@ Rafale::Rafale(float x, float y) {
     this->speed = 0.25f;
     this->yaw_ctrl = 0;
     this->pitch_ctrl = 0;
+    this->health = MAX_HEALTH;
     this->roll_ctrl = 0;
     this->rotation_matrix = glm::rotate(0.0f, glm::vec3(1, 0, 0));
 
@@ -147,7 +148,10 @@ void Rafale::tick() {
     this->position.x -= sin(this->yaw_ctrl   * M_PI/180.0f) * cos(this->pitch_ctrl * M_PI/180.0f) * this->speed;
     this->position.z -= cos(this->yaw_ctrl * M_PI/180.0f) * cos(this->pitch_ctrl * M_PI/180.0f) * this->speed;
 
-    this->fuel -= 1;
+    this->fuel -= 1.0f;
+    this->health += 0.0625f;
+    if(this->health > MAX_HEALTH)
+        this->health = MAX_HEALTH;
     // printf("%f %f %f %f %f\n", this->position.x ,this->position.y, this->position.z, this->yaw_ctrl, this->pitch_ctrl);
 }
 glm::vec3 Rafale::orientation() {
@@ -195,13 +199,46 @@ glm::vec3 Rafale::unit_vector(){
     temp = glm::normalize(temp);
     return temp;
 }
+
 float Rafale::fuel_fill(bool up) {
     //up =1 increase fuel
-    this->fuel = MAX_FUEL;
+    if(up)
+        this->fuel = MAX_FUEL;
     //up = 0 return current fuel in normalized;
     return this->fuel/MAX_FUEL;
 }
 
+void Rafale::speed_up(bool up) {
+    //up =1 increase spped
+    if(up)
+    {
+        this->speed += 0.05;
+        if(this->speed > MAX_SPEED)
+            this->speed = MAX_SPEED;
+    }
+    else{
+        this->speed -= 0.05;
+        if(this->speed < 0)
+            this->speed = 0;
+    }
+}
+
+float Rafale::speed_fill() {
+    return this->speed/MAX_SPEED;
+}
+
+float Rafale::health_fill() {
+    return this->health/MAX_HEALTH;
+}
+
+
 glm::vec3 Rafale::get_position() {
     return this->position;
+}
+
+void Rafale::die(int sick) {
+    this->health -= sick * 2 * this->speed;
+    if(this->health <= 0){
+        exit(1);
+    }
 }

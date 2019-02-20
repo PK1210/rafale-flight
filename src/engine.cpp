@@ -20,9 +20,8 @@ template <typename T> void tick_template(std::vector<T> &type) {
 template <typename T> bool detect_collision_template(std::vector<T> &type, Rafale &rafale) {
     for (auto it = type.begin(); it != type.end(); it++) {
         if(detect_collision(it->get_bounding_box(), rafale.get_bounding_box())){
-            // rafale.die();
+            rafale.die(1);
             it->die(1);
-            // printf("Hi collision\n");
             return true;
         }
     }
@@ -60,10 +59,11 @@ Engine::Engine(int level) {
     this->arrow = Arrow(0,3,3);
 
     //Dashboard Components
-    this->altitude = Seven_segment(0,-0.5,0);
-    this->compass = Compass(0.5,-0.5,0);
-    this->odometer = Odometer(0,-0.5,0);
-    this->fuel_gauge = Odometer(0,-0.5,0);
+    this->altitude = Seven_segment(-0.25f,-0.85f,0);
+    this->compass = Compass(0.85f,-0.85f,0);
+    this->fuel_gauge = Odometer(-0.5f,-0.85f,0);
+    this->odometer = Odometer(0.5f,-0.85f,0);
+    this->health_bar = Status_bar(-0.85f, 0.0f, 0);
 
     this->rafale = Rafale(0,0);
     this->sea = Sea(SIDE * 1.5);
@@ -82,7 +82,7 @@ Engine::Engine(int level) {
 void Engine::draw(glm::mat4 VP) {
     // Produce stuffs
     static const int GLOBAL = int(SIDE * 2);
-    static const int LOCAL = 50;
+    static const int LOCAL = GLOBAL;
     const int mod = int(LOCAL*2);
     const int norm = mod>>1;
 
@@ -92,28 +92,35 @@ void Engine::draw(glm::mat4 VP) {
     //Generate stuffs
     if(this->counter%11 == 7)
         this->parachutes.push_back(Parachute(rand()%mod - norm,rand()%mod - norm));
-    // if(this->counter%181 == 7)
-    //     this->parachutes.push_back(Parachute(rand()%mod - norm,rand()%mod - norm));
+    if(this->counter%181 == 7)
+        this->fuel_ups.push_back(Fuel_up(rand()%mod - norm,rand()%mod - norm,rand()%mod - norm));
     if(this->counter%179 == 7 && rings.size()<100)
-        this->rings.push_back(Ring(rand()%mod-norm,rand()%mod,rand()%mod-norm));
-    if(this->counter%379 == 7 && ships.size()<100)
+        this->rings.push_back(Ring(rand()%mod-norm,rand()%20,rand()%mod-norm));
+    if(this->counter%179 == 7 && ships.size()<100)
         this->ships.push_back(Ship(rand()%mod-norm,rand()%mod-norm));
     if(this->islands.size()<5)
         this->islands.push_back(Island(rand()%GLOBAL - SIDE, rand()%GLOBAL - SIDE));
     if(this->volcanoes.size()<40)
         this->volcanoes.push_back(Volcano(rand()%GLOBAL - SIDE, rand()%GLOBAL - SIDE));
-    if(this->towers.size()<10)
+    if(this->towers.size()<20)
         this->towers.push_back(Tower(rand()%GLOBAL - SIDE, rand()%GLOBAL - SIDE));
 
+    if(this->counter%211 == 7)
+        for (auto it = this->islands.begin(); it != this->islands.end(); it++) {
+            this->cannon_balls.push_back(Cannon_ball(it->get_position(), this->rafale.get_position() - it->get_position()));
+        }
+
     this->arrow.draw(VP,this->rafale.get_position() + 4.0f*this->rafale.unit_vector() + glm::vec3(0,1,0),glm::normalize(this->islands.begin()->get_position()-this->rafale.get_position()));
+    this->target.draw(VP,this->rafale.get_position() +4.0f*this->rafale.unit_vector(),this->rafale.unit_vector());
 
     this->altitude.draw(this->score);
     this->compass.draw(this->rafale.unit_vector());
-    this->odometer.draw(this->rafale.fuel_fill(0));
-    this->odometer.draw(this->rafale.fuel_fill(0));
-    this->target.draw(VP,false);
+    this->fuel_gauge.draw(this->rafale.fuel_fill(0));
+    this->odometer.draw(this->rafale.speed_fill());
+    this->health_bar.draw(this->rafale.health_fill());
 
     draw_template(this->bombs, VP);
+    draw_template(this->cannon_balls, VP);
     draw_template(this->fuel_ups, VP);
     draw_template(this->islands, VP);
     draw_template(this->missiles, VP);
@@ -130,31 +137,27 @@ void Engine::draw(glm::mat4 VP) {
 
 void Engine::tick() {
     tick_template(this->bombs);
+    tick_template(this->cannon_balls);
     tick_template(this->fuel_ups);
     tick_template(this->missiles);
     tick_template(this->parachutes);
     tick_template(this->ships);
 
     this->rafale.tick();
-
-    //Check shoots and shoot
-    // glm::vec4 * check = this->island.shoot();
-    // if(check){
-    //     printf("%f %f %f\n",check->x,check->y,check->z);
-    // }
 }
 
 void Engine::collider() {
+
     // Detect collision with plane
-    if(detect_collision_template(this->fuel_ups, this->rafale))
-        this->rafale.fuel_fill(1);
+    detect_collision_template(this->cannon_balls, this->rafale);
     detect_collision_template(this->islands, this->rafale);
-    if(detect_collision_template(this->rings, this->rafale))
-        this->score+=100;
     detect_collision_template(this->ships, this->rafale);
     detect_collision_template(this->towers, this->rafale);
     detect_collision_template(this->volcanoes, this->rafale);
-    // detect_collision_template(this->volcanoes, this->rafale);
+    if(detect_collision_template(this->fuel_ups, this->rafale))
+        this->rafale.fuel_fill(1);
+    if(detect_collision_template(this->rings, this->rafale))
+        this->score+=100;
 
     if(bomb_detect_collision_template(this->ships, this->bombs))
         this->score+=10;
@@ -181,6 +184,7 @@ void Engine::tick_input(GLFWwindow *window) {
     int key_d = glfwGetKey(window, GLFW_KEY_D);
     int key_q = glfwGetKey(window, GLFW_KEY_Q);
     int key_e = glfwGetKey(window, GLFW_KEY_E);
+    int key_space = glfwGetKey(window, GLFW_KEY_SPACE);
     if(key_w) {
         //Pitch up control
         this->rafale.pitch(true);
@@ -204,6 +208,10 @@ void Engine::tick_input(GLFWwindow *window) {
     if(key_e) {
         //Clockwise roll control
         this->rafale.roll(false);
+    }
+    if(key_space) {
+        //Clockwise roll control
+        this->rafale.speed_up(true);
     }
 }
 
