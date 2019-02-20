@@ -11,6 +11,8 @@ Rafale::Rafale(float x, float y) {
     this->pitch_ctrl = 0;
     this->health = MAX_HEALTH;
     this->roll_ctrl = 0;
+    this->loop_ctrl = 0;
+    this->barral_roll_ctrl = 0;
     this->rotation_matrix = glm::rotate(0.0f, glm::vec3(1, 0, 0));
 
     // Our vertices. Three consecutive floats give a 3D vertex; Three consecutive vertices give a triangle.
@@ -148,7 +150,14 @@ void Rafale::tick() {
     this->position.x -= sin(this->yaw_ctrl   * M_PI/180.0f) * cos(this->pitch_ctrl * M_PI/180.0f) * this->speed;
     this->position.z -= cos(this->yaw_ctrl * M_PI/180.0f) * cos(this->pitch_ctrl * M_PI/180.0f) * this->speed;
 
+    if(this->barral_roll_ctrl)
+        this->roll_ctrl = this->barral_roll_ctrl--;
+    if(this->loop_ctrl)
+        this->pitch_ctrl = 360 - this->loop_ctrl--;
     this->fuel -= 1.0f;
+    if(this->fuel < 0){
+        exit(1);
+    }
     this->health += 0.0625f;
     if(this->health > MAX_HEALTH)
         this->health = MAX_HEALTH;
@@ -159,6 +168,8 @@ glm::vec3 Rafale::orientation() {
 }
 
 void Rafale::yaw(bool right) {
+    if(barral_roll_ctrl || loop_ctrl)
+        return;
     if(right)
         this->yaw_ctrl -= 1;
     else
@@ -166,6 +177,8 @@ void Rafale::yaw(bool right) {
 }
 
 void Rafale::pitch(bool up) {
+    if(barral_roll_ctrl || loop_ctrl)
+        return;
     if(up)
         this->pitch_ctrl += 0.75f;
     else
@@ -173,10 +186,26 @@ void Rafale::pitch(bool up) {
 }
 
 void Rafale::roll(bool anticlockwise) {
+    if(barral_roll_ctrl || loop_ctrl)
+        return;
     if(anticlockwise)
         this->roll_ctrl += 1;
     else
         this->roll_ctrl -= 1;
+}
+
+void Rafale::barral_roll() {
+    if(barral_roll_ctrl || loop_ctrl)
+        return;
+    this->barral_roll_ctrl = 360;
+    this->roll_ctrl = 0;
+}
+
+void Rafale::loop() {
+    if(barral_roll_ctrl || loop_ctrl)
+        return;
+    this->loop_ctrl = 360;
+    this->pitch_ctrl = 0;
 }
 
 bounding_box_t Rafale::get_bounding_box() {
@@ -205,6 +234,7 @@ float Rafale::fuel_fill(bool up) {
     if(up)
         this->fuel = MAX_FUEL;
     //up = 0 return current fuel in normalized;
+    // return 2*(this->fuel/MAX_FUEL-0.5);
     return this->fuel/MAX_FUEL;
 }
 

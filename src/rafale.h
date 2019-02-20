@@ -25,6 +25,8 @@ public:
     glm::vec3 get_position();
     void die(int sick);
     float health_fill();
+    void barral_roll();
+    void loop();
 private:
     VAO *object[4];
     glm::mat4 rotation_matrix;
@@ -36,11 +38,13 @@ private:
     float roll_ctrl;
     int fuel;
     float health;
+    int barral_roll_ctrl;
+    int loop_ctrl;
     static constexpr float width = 0.3f;
     static constexpr float height = 0.3f;
     static constexpr float depth = 0.9f;
     static constexpr float span = 0.8f;
-    static constexpr int MAX_FUEL = 10000;
+    static constexpr int MAX_FUEL = 1000;
     static constexpr int MAX_HEALTH = 20;
     static constexpr float MAX_SPEED = 1.0f;
 };

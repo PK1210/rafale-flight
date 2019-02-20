@@ -93,7 +93,7 @@ void Engine::draw(glm::mat4 VP) {
     if(this->counter%11 == 7)
         this->parachutes.push_back(Parachute(rand()%mod - norm,rand()%mod - norm));
     if(this->counter%181 == 7)
-        this->fuel_ups.push_back(Fuel_up(rand()%mod - norm,rand()%mod - norm,rand()%mod - norm));
+        this->fuel_ups.push_back(Fuel_up(rand()%mod - norm,rand()%20,rand()%mod - norm));
     if(this->counter%179 == 7 && rings.size()<100)
         this->rings.push_back(Ring(rand()%mod-norm,rand()%20,rand()%mod-norm));
     if(this->counter%179 == 7 && ships.size()<100)
@@ -184,6 +184,8 @@ void Engine::tick_input(GLFWwindow *window) {
     int key_d = glfwGetKey(window, GLFW_KEY_D);
     int key_q = glfwGetKey(window, GLFW_KEY_Q);
     int key_e = glfwGetKey(window, GLFW_KEY_E);
+    int key_z = glfwGetKey(window, GLFW_KEY_Z);
+    int key_x = glfwGetKey(window, GLFW_KEY_X);
     int key_space = glfwGetKey(window, GLFW_KEY_SPACE);
     if(key_w) {
         //Pitch up control
@@ -212,6 +214,14 @@ void Engine::tick_input(GLFWwindow *window) {
     if(key_space) {
         //Clockwise roll control
         this->rafale.speed_up(true);
+    }
+    if(key_z) {
+        //Clockwise roll control
+        this->rafale.barral_roll();
+    }
+    if(key_x) {
+        //Clockwise roll control
+        this->rafale.loop();
     }
 }
 
