@@ -1,9 +1,8 @@
 #include "missile.h"
 
-Missile::Missile(float x, float y, float z) {
-    this->position = glm::vec3(x, y, z);
-    this->rotation = 0.0f;
-    // this->orientation = 0.0f;
+Missile::Missile(glm::vec3 position, glm::vec3 unit_vector) {
+    this->position = position;
+    this->orientation = unit_vector;
 
     const int n = 24;
 
@@ -50,20 +49,24 @@ Missile::Missile(float x, float y, float z) {
 
 void Missile::draw(glm::mat4 VP) {
     Matrices.model = glm::mat4(1.0f);
-    glm::mat4 translate = glm::translate (this->position);    // glTranslatef
-    // glm::mat4 orient    = glm::rotate((float) (this->rotation * M_PI / 180.0f), glm::vec3(1, 0, 0));
-    glm::mat4 rotate    = glm::rotate((float) (this->rotation * M_PI / 180.0f), glm::vec3(1, 0, 1));
+    glm::mat4 translate = glm::translate (this->position);
+    glm::vec3 axis = glm::normalize(glm::cross(glm::vec3(0,1,0),this->orientation));
+    float angle = glm::acos(glm::dot(glm::vec3(0,1,0),this->orientation));
+    if(axis.y > 0)
+        angle*=-1;
+    glm::mat4 rotate = glm::rotate(angle, axis);
 
     Matrices.model *= translate * rotate;
     glm::mat4 MVP = VP * Matrices.model;
     glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
-    draw3DObject(this->object[0]);
     draw3DObject(this->object[1]);
+    draw3DObject(this->object[0]);
     draw3DObject(this->object[2]);
 }
 
 void Missile::tick(){
-    if(abs(this->position.x)>abs(ARENA) || abs(this->position.z)>abs(ARENA))
+    this->position += speed * this->orientation;
+    if(abs(this->position.x)>abs(ARENA) || abs(this->position.z)>abs(ARENA) || abs(this->position.z) > 100)
         this->position.y = GRAVE;
 }
 

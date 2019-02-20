@@ -35,7 +35,6 @@ template <typename T> bool bomb_detect_collision_template(std::vector<T> &type, 
             if(detect_collision(it->get_bounding_box(), jt->get_bounding_box())){
                 it->die(1);
                 jt->die(1);
-                // printf("2 Object collision one bomb\n");
                 return true;
             }
         }
@@ -49,7 +48,6 @@ template <typename T> bool missile_detect_collision_template(std::vector<T> &typ
             if(detect_collision(it->get_bounding_box(), jt->get_bounding_box())){
                 it->die(1);
                 jt->die(1);
-                // printf("2 Object collision one missile\n");
                 return true;
             }
         }
@@ -59,17 +57,21 @@ template <typename T> bool missile_detect_collision_template(std::vector<T> &typ
 Engine::Engine(int level) {
     this->counter = 0;
     this->score = 0;
-    this->altitude = Seven_segment(1,2,1);
     this->arrow = Arrow(0,3,3);
-    this->compass = Compass(4,4,0);
-    this->odometer = Odometer(5,5,-5);
+
+    //Dashboard Components
+    this->altitude = Seven_segment(0,-0.5,0);
+    this->compass = Compass(0.5,-0.5,0);
+    this->odometer = Odometer(0,-0.5,0);
+    this->fuel_gauge = Odometer(0,-0.5,0);
+
     this->rafale = Rafale(0,0);
-    this->sea = Sea(SIDE);
+    this->sea = Sea(SIDE * 1.5);
     this->target = Target(0,1,0);
 
+    // this->cannon_balls.push_back()
     this->fuel_ups.push_back(Fuel_up(-6,6,-6));
     this->islands.push_back(Island(-8,-8));
-    this->missiles.push_back(Missile(0,3,1));
     this->parachutes.push_back(Parachute(0,0));
     this->rings.push_back(Ring(2,1,-6));
     this->ships.push_back(Ship(0,4));
@@ -78,10 +80,37 @@ Engine::Engine(int level) {
 }
 
 void Engine::draw(glm::mat4 VP) {
-    this->altitude.draw(VP, this->score);
-    this->arrow.draw(VP,glm::vec3(0,3,3),glm::normalize(this->islands.begin()->get_position()-this->rafale.get_position()));
-    this->compass.draw(VP, this->rafale.unit_vector(),glm::vec3(0,0,1));
-    this->odometer.draw(VP, this->rafale.fuel_fill(0), glm::vec3(0,0,1));
+    // Produce stuffs
+    static const int GLOBAL = int(SIDE * 2);
+    static const int LOCAL = 50;
+    const int mod = int(LOCAL*2);
+    const int norm = mod>>1;
+
+    // Increment counter
+    this->counter++;
+
+    //Generate stuffs
+    if(this->counter%11 == 7)
+        this->parachutes.push_back(Parachute(rand()%mod - norm,rand()%mod - norm));
+    // if(this->counter%181 == 7)
+    //     this->parachutes.push_back(Parachute(rand()%mod - norm,rand()%mod - norm));
+    if(this->counter%179 == 7 && rings.size()<100)
+        this->rings.push_back(Ring(rand()%mod-norm,rand()%mod,rand()%mod-norm));
+    if(this->counter%379 == 7 && ships.size()<100)
+        this->ships.push_back(Ship(rand()%mod-norm,rand()%mod-norm));
+    if(this->islands.size()<5)
+        this->islands.push_back(Island(rand()%GLOBAL - SIDE, rand()%GLOBAL - SIDE));
+    if(this->volcanoes.size()<40)
+        this->volcanoes.push_back(Volcano(rand()%GLOBAL - SIDE, rand()%GLOBAL - SIDE));
+    if(this->towers.size()<10)
+        this->towers.push_back(Tower(rand()%GLOBAL - SIDE, rand()%GLOBAL - SIDE));
+
+    this->arrow.draw(VP,this->rafale.get_position() + 4.0f*this->rafale.unit_vector() + glm::vec3(0,1,0),glm::normalize(this->islands.begin()->get_position()-this->rafale.get_position()));
+
+    this->altitude.draw(this->score);
+    this->compass.draw(this->rafale.unit_vector());
+    this->odometer.draw(this->rafale.fuel_fill(0));
+    this->odometer.draw(this->rafale.fuel_fill(0));
     this->target.draw(VP,false);
 
     draw_template(this->bombs, VP);
@@ -100,24 +129,6 @@ void Engine::draw(glm::mat4 VP) {
 }
 
 void Engine::tick() {
-
-    // Produce stuffs
-    static const int LOCAL = 50;
-    const int mod = int(LOCAL*2);
-    const int norm = mod>>1;
-
-    // Increment counter
-    this->counter++;
-
-    //Generate stuffs
-    if(this->counter%79 == 7)
-        this->parachutes.push_back(Parachute(rand()%mod - norm,rand()%mod - norm));
-    if(this->counter%179 == 7 && rings.size()<100)
-        this->rings.push_back(Ring(rand()%mod-norm,rand()%mod,rand()%mod-norm));
-    if(this->counter%379 == 7 && ships.size()<100)
-        this->ships.push_back(Ship(rand()%mod-norm,rand()%mod-norm));
-
-
     tick_template(this->bombs);
     tick_template(this->fuel_ups);
     tick_template(this->missiles);
@@ -151,6 +162,8 @@ void Engine::collider() {
         this->score+=1000;
 
     // Detect collision with missile
+    missile_detect_collision_template(this->volcanoes, this->missiles);
+    missile_detect_collision_template(this->towers, this->missiles);
     if(missile_detect_collision_template(this->parachutes, this->missiles))
         this->score+=1;
     if(missile_detect_collision_template(this->ships, this->missiles))
@@ -198,11 +211,10 @@ void Engine::mouse_handler(int button, int action) {
     switch (button) {
     case GLFW_MOUSE_BUTTON_LEFT:
         if (action == GLFW_PRESS) {
-            printf("Breathless\n");
             return;
         }
         else if (action == GLFW_RELEASE) {
-            printf("Breath\n");
+            this->missiles.push_back(Missile(this->rafale.get_position(),this->rafale.unit_vector()));
         }
         break;
     case GLFW_MOUSE_BUTTON_RIGHT:
@@ -216,9 +228,13 @@ void Engine::mouse_handler(int button, int action) {
 }
 
 glm::vec3 Engine::get_origin() {
-    return rafale.position;
+    return this->rafale.get_position();
 }
 
 glm::vec3 Engine::get_orientation() {
     return rafale.orientation();
+}
+
+glm::vec3 Engine::unit_vector() {
+    return this->rafale.unit_vector();
 }

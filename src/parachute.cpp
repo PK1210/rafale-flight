@@ -85,7 +85,7 @@ void Parachute::draw(glm::mat4 VP) {
 }
 
 void Parachute::tick() {
-    this->speed += GRAVITY;
+    this->speed += GRAVITY/5;
     this->position.y -= this->speed;
 }
 

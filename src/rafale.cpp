@@ -2,11 +2,11 @@
 #include "main.h"
 
 Rafale::Rafale(float x, float y) {
-    this->position = glm::vec3(x, y, 0);
+    this->position = glm::vec3(x, y + height, 0);
     this->rotation = 0;
     this->counter = 0;
     this->fuel = MAX_FUEL;
-    this->speed = 0.05f;
+    this->speed = 0.25f;
     this->yaw_ctrl = 0;
     this->pitch_ctrl = 0;
     this->roll_ctrl = 0;
@@ -163,9 +163,9 @@ void Rafale::yaw(bool right) {
 
 void Rafale::pitch(bool up) {
     if(up)
-        this->pitch_ctrl += 1.125f;
+        this->pitch_ctrl += 0.75f;
     else
-        this->pitch_ctrl -= 1.125f;
+        this->pitch_ctrl -= 0.75f;
 }
 
 void Rafale::roll(bool anticlockwise) {
@@ -190,8 +190,8 @@ bounding_box_t Rafale::get_bounding_box() {
 glm::vec3 Rafale::unit_vector(){
     glm::vec3 temp;
     temp.y = sin(this->pitch_ctrl * M_PI/180.0f);
-    temp.x = sin(this->yaw_ctrl   * M_PI/180.0f) * cos(this->pitch_ctrl * M_PI/180.0f);
-    temp.z = cos(this->yaw_ctrl * M_PI/180.0f) * cos(this->pitch_ctrl * M_PI/180.0f);
+    temp.x = -sin(this->yaw_ctrl   * M_PI/180.0f) * cos(this->pitch_ctrl * M_PI/180.0f);
+    temp.z = -cos(this->yaw_ctrl * M_PI/180.0f) * cos(this->pitch_ctrl * M_PI/180.0f);
     temp = glm::normalize(temp);
     return temp;
 }

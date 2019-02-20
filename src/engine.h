@@ -34,11 +34,13 @@ public:
     void mouse_handler(int button,int action);
     glm::vec3 get_origin();
     glm::vec3 get_orientation();
+    glm::vec3 unit_vector();
 private:
     int counter;
     int score;
     Arrow arrow;
     Compass compass;
+    Odometer fuel_gauge;
     Odometer odometer;
     Rafale rafale;
     Sea sea;

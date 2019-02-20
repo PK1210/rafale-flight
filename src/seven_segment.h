@@ -3,8 +3,8 @@
 #ifndef Digit_display_H
 #define Digit_display_H
 
-const float SEGMENT_LENGTH = 0.25;
-const float THICKNESS = 0.03;
+const float SEGMENT_LENGTH = 0.025f;
+const float THICKNESS = 0.003f;
 const int MAX_DIGITS = 4;
 
 const bool decoder[10][7] = {
@@ -35,7 +35,7 @@ public:
     Segment(float x, float y, float z, float rotation, color_t color);
     glm::vec3 position;
     float rotation;
-    void draw(glm::mat4 VP);
+    void draw();
     void set_position(float x, float y, float z);
 private:
     VAO *object;
@@ -47,7 +47,7 @@ public:
     Digit_display(float x, float y, float z, int digit);
     glm::vec3 position;
     float rotation;
-    void draw(glm::mat4 VP);
+    void draw();
     void set_position(float x, float y, float z);
 private:
     Segment segments[7];
@@ -57,14 +57,12 @@ class Seven_segment {
 public:
     Seven_segment() {}
     Seven_segment(float x, float y, float z);
-    glm::vec3 position;
-    float rotation;
-    void draw(glm::mat4 VP, int number);
+    void draw(int number);
     void set_position(float x, float y, float z);
 private:
     VAO *object;
+    glm::vec3 position;
     Digit_display digits[MAX_DIGITS];
-    int count;
 };
 
 #endif // Digit_display_H

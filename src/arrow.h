@@ -12,8 +12,8 @@ public:
 private:
     VAO *object[2];
     glm::vec3 position;
-    static constexpr float width = 0.05f;
-    static constexpr float height= 0.3f;
+    static constexpr float width = 0.2f;
+    static constexpr float height= 1.0f;
 };
 
 #endif // ARROW_H

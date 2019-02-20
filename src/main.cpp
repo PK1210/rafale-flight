@@ -44,9 +44,6 @@ void draw() {
     // use the loaded shader program
     glUseProgram (programID);
 
-    // Compute Camera matrix (view)
-    target = engine.get_origin();
-
     Matrices.view = glm::lookAt( eye, target, up ); // Rotating Camera for 3D
     // Matrices.view = glm::lookAt(glm::vec3(0, 0, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)); // Fixed camera for 2D (ortho) in XY plane
 
@@ -150,24 +147,23 @@ int main(int argc, char **argv) {
             {
                 case 1:{
                     target = engine.get_origin();
-                    float theta = engine.get_orientation().x;
-                    theta = glm::radians(theta);
-                    eye = glm::vec3 (target.x + 8*sin(theta), target.y + 4, target.z + 8*cos(theta));
+                    glm::vec3 temp = engine.unit_vector();
+                    temp = glm::vec3(7.0f * temp.x, 0.5f * temp.y, 7.0f * temp.z);
+                    eye = target - temp;
                     up = glm::vec3 (0,1,0);
                     break;
                 }
                 case 2:{
                     target = engine.get_origin();
-                    eye = glm::vec3 (target.x, target.y + 32, target.z);
+                    eye = glm::vec3 (target.x, target.y + 100, target.z);
                     up = glm::vec3 (0,0,-1);
                     break;
                 }
                 case 3:{
-                    glm::vec3 position = engine.get_origin();
-                    glm::vec3 theta = engine.get_orientation();
-                    eye = glm::vec3 (position.x, position.y, position.z);
-                    target = engine.get_origin();
-                    up = glm::vec3 (0,0,-1);
+                    glm::vec3 temp = engine.unit_vector();
+                    target = engine.get_origin() + 10.0f*temp;
+                    eye = engine.get_origin() + 3.0f*temp;
+                    up = glm::vec3 (0,1,0);
                     break;
                 }
                 case 4:{
@@ -177,7 +173,12 @@ int main(int argc, char **argv) {
                     break;
                 }
                 case 5:{
-                    eye = glm::vec3 (6,8,-10);
+                    double xpos,ypos;
+                    glfwGetCursorPos(window,&xpos,&ypos);
+                    float theta = 2 * xpos/width * M_PI;
+                    float phi = 2 * (ypos+30)/height * M_PI;
+                    glm::vec3 movement = glm::vec3(cos(theta)*sin(phi),cos(phi),sin(theta)*sin(phi));
+                    eye = engine.get_origin() - 12.5f * movement;
                     target = engine.get_origin();
                     up = glm::vec3 (0,100,0);
                     break;
@@ -191,7 +192,7 @@ int main(int argc, char **argv) {
         glfwPollEvents();
 
         // Add usleep
-        usleep(10000);
+        usleep(8000);
     }
 
     quit(window);

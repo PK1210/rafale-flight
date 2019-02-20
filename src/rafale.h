@@ -36,7 +36,7 @@ private:
     static constexpr float depth = 0.9f;
     static constexpr float span = 0.8f;
     static constexpr int MAX_FUEL = 10000;
-    static constexpr float MAX_SPEED = 0.8f;
+    static constexpr float MAX_SPEED = 1.0f;
 };
 
 #endif // RAFALE_H
